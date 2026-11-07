@@ -2,7 +2,11 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="TP-04 Console" />
+<meta name="theme-color" content="#121315" />
 <title>TP-04 FIELD CONSOLE — Tactile Acoustic & Magnetic Synthesizer</title>
 <meta name="description" content="120Hz Spring Physics & Tactile WebAudio Synthesizer. Dual-capstan tape scrub, phosphor CRT scope, stepped detent knobs and ballistic VU telemetry." />
 <meta property="og:title" content="TP-04 FIELD CONSOLE — 机械触感声学控制台" />
@@ -1240,9 +1244,9 @@
     background: #0c0f0d;
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 5px;
-    padding: 4px 9px;
-    min-width: 196px;
-    max-width: 220px;
+    padding: 4px 8px;
+    min-width: 168px;
+    max-width: 196px;
     box-shadow: inset 0 2px 5px rgba(0,0,0,0.9);
     font-family: var(--font-mono);
     display: flex;
@@ -1283,9 +1287,9 @@
     transition: width 0.06s linear;
   }
   .mech-key.compact {
-    min-width: 64px;
+    min-width: 54px;
     height: 32px;
-    padding: 0 9px;
+    padding: 0 8px;
     font-size: 9.5px;
   }
   .mech-key.rec-key {
@@ -1308,6 +1312,28 @@
     color: #ff453a;
     border-color: #6e1c18;
     background: linear-gradient(180deg, #2b1616 0%, #1d1010 100%);
+  }
+  .mech-key.mic-rec-key {
+    background: linear-gradient(180deg, #d9381e 0%, #9e1f0b 100%);
+    color: #fff;
+    border-color: #4f0c02;
+    box-shadow: 0 4px 0 #470b02, 0 6px 10px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+  .mech-key.mic-rec-key.latched {
+    box-shadow: 0 1.5px 0 #470b02, 0 2px 4px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.45);
+    animation: recPulse 0.65s infinite alternate;
+  }
+  .mech-key.overdub-key.latched {
+    border-color: var(--phosphor-amber);
+    color: var(--phosphor-amber);
+  }
+  .mech-key.overdub-key.latched .key-led {
+    background: var(--phosphor-amber);
+    box-shadow: 0 0 8px var(--phosphor-amber);
+  }
+  .tape-head-shield.recording .head-gap-line {
+    background: #ff2a1a;
+    box-shadow: 0 0 10px #ff2a1a, 0 0 4px #fff;
   }
   .tape-stage.drag-over {
     outline: 2px dashed var(--amber);
@@ -1720,9 +1746,17 @@
         <span class="key-led"></span>
         <span data-i18n="src.demo">DEMO TAPE</span>
       </button>
+      <button class="mech-key compact mic-rec-key" id="micTapeRecBtn" data-i18n-title="tip.micrec">
+        <span class="key-led"></span>
+        <span id="micTapeRecLabel" data-i18n="src.micrec">MIC → TAPE</span>
+      </button>
+      <button class="mech-key compact overdub-key" id="overdubBtn" data-i18n-title="tip.overdub">
+        <span class="key-led"></span>
+        <span data-i18n="src.overdub">OVERDUB</span>
+      </button>
       <button class="mech-key compact" id="liveInBtn" data-i18n-title="tip.live">
         <span class="key-led"></span>
-        <span data-i18n="src.live">LIVE MIC</span>
+        <span data-i18n="src.live">MONITOR</span>
       </button>
       <div class="track-lcd" id="trackLcd" data-i18n-title="tip.drop">
         <div class="track-lcd-top">
@@ -1852,7 +1886,7 @@
       'cap.3': '<kbd>拖动磁带盘</kbd> 用手搓带变速',
       'cap.4': '<kbd>1–4</kbd> 切换和弦',
       'cap.5': '<kbd>T</kbd> 换主题　<kbd>L</kbd> 换语言',
-      'group.source': '音源', 'src.load': '上带文件', 'src.demo': '示范磁带', 'src.live': '外部拾音', 'lcd.empty': '拖入音频或点示范磁带', 'group.stutter': '切片', 'group.iso': '杀频', 'iso.low': '低频', 'iso.mid': '中频', 'iso.high': '高频', 'rec.idle': '转录 WAV', 'rec.active': '录音导出', 'tip.load': '选择本地 MP3/WAV/FLAC 音频装入磁带盘', 'tip.demo': '生成一段内置 Lo-Fi 鼓点与电钢琴磁带环', 'tip.live': '开启麦克风或系统音频输入，实时驱动指针与磁带效果', 'tip.drop': '直接把电脑里的音乐文件拖到上方磁带仓即可上带', 'tip.stutter': '按住（或按 Q/W/E）按当前 BPM 节拍循环鬼畜切片', 'tip.rec': '把当前合成台输出实时录制并下载为立体声 WAV 文件', 'lang.label': '界面语言', 'theme.label': '机壳主题',
+      'group.source': '音源', 'src.load': '上带文件', 'src.demo': '示范磁带', 'src.micrec': '麦克风录带', 'src.micstop': '停止录带', 'src.overdub': '叠录 SOS', 'src.live': '监听拾音', 'tip.micrec': '用麦克风把你的声音直接录进旋转磁带盘（快捷键 R），录完立即循环播放并可搓碟/变速', 'tip.overdub': '开启磁带叠录模式（Sound-on-Sound）：在现有磁带音乐或录音上一层层叠加新声音，老声音按 85% 磁带老化衰减', 'lcd.empty': '拖入音频或点示范磁带', 'group.stutter': '切片', 'group.iso': '杀频', 'iso.low': '低频', 'iso.mid': '中频', 'iso.high': '高频', 'rec.idle': '转录 WAV', 'rec.active': '录音导出', 'tip.load': '选择本地 MP3/WAV/FLAC 音频装入磁带盘', 'tip.demo': '生成一段内置 Lo-Fi 鼓点与电钢琴磁带环', 'tip.live': '开启麦克风或系统音频输入，实时驱动指针与磁带效果', 'tip.drop': '直接把电脑里的音乐文件拖到上方磁带仓即可上带', 'tip.stutter': '按住（或按 Q/W/E）按当前 BPM 节拍循环鬼畜切片', 'tip.rec': '把当前合成台输出实时录制并下载为立体声 WAV 文件', 'lang.label': '界面语言', 'theme.label': '机壳主题',
       'theme.ivory': '象牙机壳', 'theme.graphite': '石墨', 'theme.braun': '博朗白', 'theme.cobalt': '钴蓝',
     },
     en: {
@@ -1888,7 +1922,7 @@
       'cap.3': '<kbd>DRAG REELS</kbd> scrub the tape by hand',
       'cap.4': '<kbd>1–4</kbd> change chord',
       'cap.5': '<kbd>T</kbd> theme　<kbd>L</kbd> language',
-      'group.source': 'TAPE IN', 'src.load': 'LOAD MP3', 'src.demo': 'DEMO TAPE', 'src.live': 'LIVE IN', 'lcd.empty': 'DROP AUDIO ON REELS', 'group.stutter': 'LOOP', 'group.iso': 'ISOLATOR', 'iso.low': 'LOW', 'iso.mid': 'MID', 'iso.high': 'HIGH', 'rec.idle': 'REC WAV', 'rec.active': 'STOP & SAVE', 'tip.load': 'Load a local MP3/WAV/FLAC file onto the tape reels', 'tip.demo': 'Load built-in procedural Lo-Fi drum & Rhodes tape loop', 'tip.live': 'Route live microphone / loopback audio through the tape deck', 'tip.drop': 'Drag and drop any audio file onto the tape transport bay', 'tip.stutter': 'Hold (or press Q/W/E) for beat-synced tape stutter roll', 'tip.rec': 'Record master output and export a stereo 16-bit WAV file', 'lang.label': 'Interface language', 'theme.label': 'Chassis theme',
+      'group.source': 'TAPE IN', 'src.load': 'LOAD MP3', 'src.demo': 'DEMO TAPE', 'src.micrec': 'MIC → TAPE', 'src.micstop': 'STOP TAPE', 'src.overdub': 'OVERDUB', 'src.live': 'MONITOR', 'tip.micrec': 'Record your microphone directly onto the spinning magnetic tape loop (Shortcut: R) to scrub, pitch-shift or stutter your own voice', 'tip.overdub': 'Sound-on-Sound Overdub: layer live microphone audio directly onto the existing rotating tape loop with 85% vintage tape decay', 'lcd.empty': 'DROP AUDIO ON REELS', 'group.stutter': 'LOOP', 'group.iso': 'ISOLATOR', 'iso.low': 'LOW', 'iso.mid': 'MID', 'iso.high': 'HIGH', 'rec.idle': 'REC WAV', 'rec.active': 'STOP & SAVE', 'tip.load': 'Load a local MP3/WAV/FLAC file onto the tape reels', 'tip.demo': 'Load built-in procedural Lo-Fi drum & Rhodes tape loop', 'tip.live': 'Route live microphone / loopback audio through the tape deck', 'tip.drop': 'Drag and drop any audio file onto the tape transport bay', 'tip.stutter': 'Hold (or press Q/W/E) for beat-synced tape stutter roll', 'tip.rec': 'Record master output and export a stereo 16-bit WAV file', 'lang.label': 'Interface language', 'theme.label': 'Chassis theme',
       'theme.ivory': 'Ivory', 'theme.graphite': 'Graphite', 'theme.braun': 'Braun White', 'theme.cobalt': 'Cobalt',
     },
     ja: {
@@ -1924,7 +1958,7 @@
       'cap.3': '<kbd>リールをドラッグ</kbd> 手でスクラブ',
       'cap.4': '<kbd>1–4</kbd> コード切替',
       'cap.5': '<kbd>T</kbd> テーマ　<kbd>L</kbd> 言語',
-      'group.source': '音源', 'src.load': 'ファイル読込', 'src.demo': 'デモテープ', 'src.live': '外部入力', 'lcd.empty': '音声をリールへドロップ', 'group.stutter': 'ループ', 'group.iso': 'アイソレータ', 'iso.low': '低域', 'iso.mid': '中域', 'iso.high': '高域', 'rec.idle': 'WAV 録音', 'rec.active': '停止・保存', 'tip.load': 'MP3/WAV/FLAC をテープリールに装填', 'tip.demo': '内蔵 Lo-Fi ドラム＆エレピ・ループを装填', 'tip.live': 'マイク／外部音声を入力してリアルタイム処理', 'tip.drop': '音声ファイルを上部リールへ直接ドロップ', 'tip.stutter': '押している間（Q/W/E）BPM同期スタッター', 'tip.rec': 'マスター出力を録音してステレオ WAV 保存', 'lang.label': '表示言語', 'theme.label': '筐体テーマ',
+      'group.source': '音源', 'src.load': 'ファイル読込', 'src.demo': 'デモテープ', 'src.micrec': 'マイク録音', 'src.micstop': '録音停止', 'src.overdub': '重ね録り', 'src.live': 'モニター', 'tip.micrec': 'マイクの音声を回転中の磁気テープへ直接録音（キー R）。録音後すぐにスクラブや変速が可能', 'tip.overdub': 'サウンド・オン・サウンド重ね録り：既存のテープループ上に新しい音声を85%減衰で重ねる', 'lcd.empty': '音声をリールへドロップ', 'group.stutter': 'ループ', 'group.iso': 'アイソレータ', 'iso.low': '低域', 'iso.mid': '中域', 'iso.high': '高域', 'rec.idle': 'WAV 録音', 'rec.active': '停止・保存', 'tip.load': 'MP3/WAV/FLAC をテープリールに装填', 'tip.demo': '内蔵 Lo-Fi ドラム＆エレピ・ループを装填', 'tip.live': 'マイク／外部音声を入力してリアルタイム処理', 'tip.drop': '音声ファイルを上部リールへ直接ドロップ', 'tip.stutter': '押している間（Q/W/E）BPM同期スタッター', 'tip.rec': 'マスター出力を録音してステレオ WAV 保存', 'lang.label': '表示言語', 'theme.label': '筐体テーマ',
       'theme.ivory': 'アイボリー', 'theme.graphite': 'グラファイト', 'theme.braun': 'ブラウン・ホワイト', 'theme.cobalt': 'コバルト',
     },
   };
@@ -2218,6 +2252,12 @@
   let stutterAnchorSample = 0;
   let liveStream = null, liveSourceNode = null;
   let isRecordingWav = false;
+  let isMicRecordingTape = false;
+  let isOverdubMode = false;
+  let micOverdubActive = false;
+  let micTapeChunksL = [], micTapeChunksR = [];
+  let micTapeSampleCount = 0;
+  let micRecStartTime = 0;
   let recBuffersL = [], recBuffersR = [];
   const isoKillState = { low: false, mid: false, high: false };
 
@@ -2255,12 +2295,38 @@
     isoHigh.frequency.value = 3600;
     isoHigh.gain.value = 0;
 
-    // Bidirectional Magnetic Tape Buffer Processor (supports forward, reverse scrub, beat-stutter & WAV capture)
+    // Bidirectional Magnetic Tape Buffer Processor (supports forward, reverse scrub, beat-stutter, Mic-to-Tape Recording & Sound-on-Sound Overdub!)
     tapeScriptNode = actx.createScriptProcessor(1024, 2, 2);
     tapeScriptNode.onaudioprocess = (ev) => {
+      const inL = ev.inputBuffer.getChannelData(0);
+      const inR = ev.inputBuffer.numberOfChannels > 1 ? ev.inputBuffer.getChannelData(1) : inL;
       const outL = ev.outputBuffer.getChannelData(0);
       const outR = ev.outputBuffer.getChannelData(1);
       const n = outL.length;
+
+      // Mode A: Fresh Mic-to-Tape Recording (records into dynamic growable buffer up to 30s)
+      if (isMicRecordingTape && !isOverdubMode) {
+        const chunkL = new Float32Array(n);
+        const chunkR = new Float32Array(n);
+        for (let i = 0; i < n; i++) {
+          // Warm analog tape soft-clipping on mic input
+          const sL = Math.tanh(inL[i] * 1.65);
+          const sR = Math.tanh(inR[i] * 1.65);
+          chunkL[i] = sL;
+          chunkR[i] = sR;
+          // Pass through to output so user sees CRT waveform & hears tape FX while recording
+          outL[i] = sL * 0.75;
+          outR[i] = sR * 0.75;
+        }
+        micTapeChunksL.push(chunkL);
+        micTapeChunksR.push(chunkR);
+        micTapeSampleCount += n;
+        if (micTapeSampleCount >= actx.sampleRate * 30) {
+          setTimeout(() => stopMicTapeRecording(), 0);
+        }
+        return;
+      }
+
       if (!tapeLoadedBuffer || !powered) {
         for (let i = 0; i < n; i++) { outL[i] = 0; outR[i] = 0; }
         return;
@@ -2275,8 +2341,19 @@
         let frac = tapePlayheadSample - idx;
         idx = ((idx % len) + len) % len;
         const idxNext = (idx + 1) % len;
-        outL[i] = (chL[idx] * (1 - frac) + chL[idxNext] * frac) * 0.85;
-        outR[i] = (chR[idx] * (1 - frac) + chR[idxNext] * frac) * 0.85;
+        const readL = chL[idx] * (1 - frac) + chL[idxNext] * frac;
+        const readR = chR[idx] * (1 - frac) + chR[idxNext] * frac;
+
+        // Sound-on-Sound Overdub Write Head: mixes live mic onto rotating tape with 86% vintage saturation decay
+        if (isOverdubMode && micOverdubActive) {
+          const micSampleL = inL[i] * 1.35;
+          const micSampleR = inR[i] * 1.35;
+          chL[idx] = Math.tanh(chL[idx] * 0.88 + micSampleL);
+          chR[idx] = Math.tanh(chR[idx] * 0.88 + micSampleR);
+        }
+
+        outL[i] = readL * 0.85;
+        outR[i] = readR * 0.85;
 
         tapePlayheadSample += rate;
         if (stutterDiv > 0) {
@@ -2615,6 +2692,8 @@
       selectChord(Number(e.code.replace('Digit', '')) - 1);
     } else if (e.code === 'KeyT' && !e.metaKey && !e.ctrlKey && !e.altKey) {
       setTheme(THEMES[(THEMES.indexOf(document.documentElement.dataset.theme) + 1) % THEMES.length], true);
+    } else if (e.code === 'KeyR' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      micTapeRecBtn.click();
     } else if (e.code === 'KeyL' && !e.metaKey && !e.ctrlKey && !e.altKey) {
       setLanguage(LANGS[(LANGS.indexOf(currentLang) + 1) % LANGS.length], true);
     } else if (!e.repeat && (e.code === 'KeyQ' || e.code === 'KeyW' || e.code === 'KeyE')) {
@@ -2713,7 +2792,11 @@
     const effectiveSpeed = actualCapstanSpeed + (powered ? flutterWave : 0);
     effectiveTapeRate = effectiveSpeed;
 
-    if (tapeLoadedBuffer && tapeLoadedBuffer.length > 0) {
+    if (isMicRecordingTape && actx) {
+      const recSec = micTapeSampleCount / actx.sampleRate;
+      bpmBadge.textContent = `REC ${recSec.toFixed(1)}s`;
+      document.getElementById('trackProgressFill').style.width = `${Math.min(100, (recSec / 15) * 100).toFixed(1)}%`;
+    } else if (tapeLoadedBuffer && tapeLoadedBuffer.length > 0) {
       const pct = ((tapePlayheadSample % tapeLoadedBuffer.length) + tapeLoadedBuffer.length) % tapeLoadedBuffer.length / tapeLoadedBuffer.length;
       document.getElementById('trackProgressFill').style.width = `${(pct * 100).toFixed(1)}%`;
     }
@@ -3079,6 +3162,121 @@
       liveInBtn.classList.add('latched');
       trackTitleText.removeAttribute('data-i18n');
       trackTitleText.textContent = 'LIVE AUDIO INPUT';
+      if (!powered) togglePower(true);
+    } catch (_) {
+      trackTitleText.textContent = 'MIC PERMISSION DENIED';
+    }
+  });
+
+  // Direct Microphone-to-Tape Loop Recorder & Sound-on-Sound Overdub
+  const micTapeRecBtn = document.getElementById('micTapeRecBtn');
+  const micTapeRecLabel = document.getElementById('micTapeRecLabel');
+  const overdubBtn = document.getElementById('overdubBtn');
+  const headShieldEl = document.querySelector('.tape-head-shield');
+
+  async function ensureMicConnectedToTapeHead() {
+    ensureAudioInit();
+    if (!liveStream) {
+      liveStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+      });
+    }
+    if (!liveSourceNode) {
+      liveSourceNode = actx.createMediaStreamSource(liveStream);
+      liveSourceNode.connect(tapeScriptNode);
+    }
+  }
+
+  function stopMicTapeRecording() {
+    if (!isMicRecordingTape) return;
+    isMicRecordingTape = false;
+    playSwitchClack(0);
+    micTapeRecBtn.classList.remove('latched');
+    headShieldEl.classList.remove('recording');
+    micTapeRecLabel.setAttribute('data-i18n', 'src.micrec');
+    micTapeRecLabel.textContent = t('src.micrec');
+
+    if (micTapeSampleCount > 1024 && actx) {
+      const newBuf = actx.createBuffer(2, micTapeSampleCount, actx.sampleRate);
+      const dstL = newBuf.getChannelData(0);
+      const dstR = newBuf.getChannelData(1);
+      let off = 0;
+      for (let c = 0; c < micTapeChunksL.length; c++) {
+        dstL.set(micTapeChunksL[c], off);
+        dstR.set(micTapeChunksR[c], off);
+        off += micTapeChunksL[c].length;
+      }
+      tapeLoadedBuffer = newBuf;
+      tapePlayheadSample = 0;
+      detectedBpm = estimateBpmFromBuffer(newBuf);
+      const durSec = (micTapeSampleCount / actx.sampleRate).toFixed(1);
+      bpmBadge.textContent = `${durSec}s LOOP`;
+      trackTitleText.removeAttribute('data-i18n');
+      trackTitleText.textContent = 'MIC TAPE LOOP ●';
+      demoBeatBtn.classList.remove('latched');
+    }
+    micTapeChunksL = [];
+    micTapeChunksR = [];
+    micTapeSampleCount = 0;
+  }
+
+  micTapeRecBtn.addEventListener('click', async () => {
+    ensureAudioInit();
+    if (isMicRecordingTape) {
+      stopMicTapeRecording();
+      return;
+    }
+    try {
+      await ensureMicConnectedToTapeHead();
+      playSwitchClack(1);
+      isOverdubMode = false;
+      micOverdubActive = false;
+      overdubBtn.classList.remove('latched');
+      micTapeChunksL = [];
+      micTapeChunksR = [];
+      micTapeSampleCount = 0;
+      micRecStartTime = performance.now();
+      isMicRecordingTape = true;
+      micTapeRecBtn.classList.add('latched');
+      headShieldEl.classList.add('recording');
+      micTapeRecLabel.setAttribute('data-i18n', 'src.micstop');
+      micTapeRecLabel.textContent = t('src.micstop');
+      trackTitleText.removeAttribute('data-i18n');
+      trackTitleText.textContent = 'REC MIC TO TAPE...';
+      if (!powered) togglePower(true);
+    } catch (_) {
+      trackTitleText.textContent = 'MIC PERMISSION DENIED';
+    }
+  });
+
+  overdubBtn.addEventListener('click', async () => {
+    ensureAudioInit();
+    if (isOverdubMode) {
+      isOverdubMode = false;
+      micOverdubActive = false;
+      playSwitchClack(0);
+      overdubBtn.classList.remove('latched');
+      headShieldEl.classList.remove('recording');
+      trackTitleText.textContent = 'OVERDUB LOCKED ●';
+      return;
+    }
+    try {
+      await ensureMicConnectedToTapeHead();
+      playSwitchClack(1);
+      // If no tape is loaded yet, create a blank 4-second magnetic tape loop to overdub onto!
+      if (!tapeLoadedBuffer) {
+        const blankLen = actx.sampleRate * 4;
+        tapeLoadedBuffer = actx.createBuffer(2, blankLen, actx.sampleRate);
+        tapePlayheadSample = 0;
+        bpmBadge.textContent = '4.0s LOOP';
+      }
+      if (isMicRecordingTape) stopMicTapeRecording();
+      isOverdubMode = true;
+      micOverdubActive = true;
+      overdubBtn.classList.add('latched');
+      headShieldEl.classList.add('recording');
+      trackTitleText.removeAttribute('data-i18n');
+      trackTitleText.textContent = 'SOS OVERDUBBING...';
       if (!powered) togglePower(true);
     } catch (_) {
       trackTitleText.textContent = 'MIC PERMISSION DENIED';
