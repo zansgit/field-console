@@ -1417,6 +1417,314 @@
     border-color: var(--phosphor-green);
     box-shadow: 0 0 8px rgba(88, 242, 135, 0.3);
   }
+
+  /* 5th Easter-Egg Theme: Transparent Acrylic + Gold/Green PCB & Glowing Vacuum Tubes */
+  [data-theme="xray"] {
+    --desk-bg: #050706;
+    --ch-1: rgba(16, 38, 28, 0.86);
+    --ch-2: rgba(11, 27, 20, 0.90);
+    --ch-3: rgba(8, 20, 15, 0.94);
+    --panel-1: rgba(18, 44, 32, 0.72);
+    --panel-2: rgba(12, 31, 22, 0.78);
+    --deck-1: rgba(15, 36, 26, 0.78);
+    --deck-2: rgba(10, 25, 18, 0.84);
+    --chassis-ink: #e8f5ec;
+    --chassis-muted: #7bc496;
+    --chassis-hairline: rgba(212, 175, 55, 0.32);
+    --tick-idle: #3b6e52;
+    --well: rgba(4, 14, 9, 0.55);
+    --well-border: rgba(212, 175, 55, 0.28);
+    --amber: #ffd147;
+    --amber-glow: rgba(255, 209, 71, 0.55);
+    --key-a1: #ffd147; --key-a2: #d49b15; --key-a-edge: #6b4c00; --key-a-border: #5c4100; --key-a-ink: #111513;
+    --badge-bg: #ffd147; --badge-ink: #0a1911; --bevel-hi: rgba(255, 230, 150, 0.42);
+  }
+
+  /* Underlying Gold PCB Trace & Vacuum Tube Layer visible in X-Ray mode */
+  .pcb-underlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: 1;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 22% 72%, rgba(255, 120, 30, 0.28) 0%, transparent 18%),
+      radial-gradient(circle at 32% 72%, rgba(255, 120, 30, 0.24) 0%, transparent 16%),
+      radial-gradient(circle at 78% 28%, rgba(88, 242, 135, 0.14) 0%, transparent 25%),
+      repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.05) 0px, rgba(212, 175, 55, 0.05) 1px, transparent 1px, transparent 14px),
+      repeating-linear-gradient(-45deg, rgba(212, 175, 55, 0.04) 0px, rgba(212, 175, 55, 0.04) 1px, transparent 1px, transparent 18px);
+  }
+  [data-theme="xray"] .pcb-underlay {
+    opacity: 1;
+  }
+  [data-theme="xray"] .hardware-unit {
+    backdrop-filter: blur(8px);
+    border-color: rgba(212, 175, 55, 0.55);
+  }
+  .screw {
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+  .screw:hover {
+    transform: rotate(90deg) scale(1.12);
+  }
+
+  /* 3D 180-Degree Flip Chassis Architecture */
+  #viewportRig {
+    perspective: 1800px;
+  }
+  .hardware-unit {
+    transform-style: preserve-3d;
+    transition: transform 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hardware-unit.flipped {
+    transform: rotateY(180deg);
+  }
+  .front-face {
+    position: relative;
+    z-index: 2;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  .hardware-unit.flipped .front-face {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* Rear Backplate & Modular Bay (180deg Back Face) */
+  .rear-face {
+    position: absolute;
+    inset: 20px 22px 22px;
+    transform: rotateY(180deg);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .hardware-unit.flipped .rear-face {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .rear-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 16px;
+    flex: 1;
+  }
+
+  /* 6-Slot Cassette Tape Vault on Rear Panel */
+  .cassette-vault-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .cassette-slot {
+    background: #141618;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 10px 10px 9px;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 7px;
+    font-family: var(--font-mono);
+    position: relative;
+    overflow: hidden;
+  }
+  .cassette-slot.loaded {
+    border-color: var(--amber);
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.85), 0 0 12px var(--amber-glow);
+  }
+  .cassette-label-strip {
+    background: #eae5d9;
+    color: #1b1d1f;
+    padding: 4px 7px;
+    border-radius: 3px;
+    border-left: 4px solid var(--amber);
+    font-size: 9.5px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cassette-slot.empty .cassette-label-strip {
+    background: #282b2e;
+    color: #7c8086;
+    border-left-color: #55595e;
+  }
+  .cassette-meta {
+    font-size: 9px;
+    color: #8f949a;
+    display: flex;
+    justify-content: space-between;
+  }
+  .cassette-btns {
+    display: flex;
+    gap: 5px;
+  }
+  .cas-btn {
+    flex: 1;
+    height: 27px;
+    border-radius: 4px;
+    border: 1px solid #323539;
+    background: linear-gradient(180deg, #2e3135 0%, #1e2023 100%);
+    color: #d6d2c8;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .cas-btn.primary {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  /* Rear Right: Modular Patch Matrix + Mechanical Sleep Timer +Glowing Vacuum Tube Window */
+  .rear-right-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .patch-matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .patch-cord-btn {
+    background: #141618;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 7px;
+    padding: 9px 10px;
+    color: #b5b9bf;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    touch-action: manipulation;
+  }
+  .patch-cord-btn.patched {
+    border-color: var(--phosphor-green);
+    color: var(--phosphor-green);
+    background: rgba(88, 242, 135, 0.09);
+    box-shadow: 0 0 12px rgba(88, 242, 135, 0.2);
+  }
+  .jack-hole {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #050607;
+    border: 2px solid #8a8d91;
+    box-shadow: inset 0 1px 3px #000;
+    flex-shrink: 0;
+  }
+  .patch-cord-btn.patched .jack-hole {
+    background: var(--phosphor-green);
+    border-color: #fff;
+    box-shadow: 0 0 8px var(--phosphor-green);
+  }
+
+  /* Vacuum Tube & Sleep Timer Bay */
+  .tube-timer-bay {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: #101213;
+    border-radius: 9px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255,255,255,0.09);
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.9);
+  }
+  .tube-window {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .vacuum-tube {
+    width: 26px;
+    height: 46px;
+    border-radius: 13px 13px 4px 4px;
+    background: radial-gradient(circle at 50% 62%, rgba(255, 115, 25, 0.85), rgba(180, 45, 10, 0.35) 55%, rgba(20, 22, 24, 0.9) 100%);
+    border: 1px solid rgba(255, 200, 150, 0.35);
+    box-shadow: 0 0 16px rgba(255, 100, 20, 0.55), inset 0 2px 4px rgba(255,255,255,0.35);
+    position: relative;
+  }
+  .sleep-timer-controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+  }
+  .timer-pills {
+    display: flex;
+    gap: 4px;
+  }
+
+  /* Touch-Friendly 12-Key Synthesizer Ribbon Drawer */
+  .touch-keys-drawer {
+    display: none;
+    grid-template-columns: repeat(13, 1fr);
+    gap: 4px;
+    background: #111315;
+    padding: 7px 8px;
+    border-radius: 9px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.9);
+    position: relative;
+    z-index: 2;
+    touch-action: none;
+  }
+  .touch-keys-drawer.open {
+    display: grid;
+  }
+  .t-piano-key {
+    height: 42px;
+    border-radius: 4px;
+    border: 1px solid #26292c;
+    background: linear-gradient(180deg, #ece8df 0%, #cfc9bc 100%);
+    color: #1c1e20;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #5c5850;
+    touch-action: none;
+  }
+  .t-piano-key.sharp {
+    background: linear-gradient(180deg, #323539 0%, #1c1e21 100%);
+    color: #d6d2c8;
+    border-color: #101113;
+    box-shadow: 0 3px 0 #090a0b;
+  }
+  .t-piano-key.down {
+    transform: translateY(2.5px);
+    background: var(--amber) !important;
+    color: #fff !important;
+    box-shadow: 0 0.5px 0 #111 !important;
+  }
+
   .tape-stage.drag-over {
     outline: 2px dashed var(--amber);
     outline-offset: -4px;
@@ -1478,9 +1786,21 @@
       gap: 10px;
     }
     .upper-deck,
-    .middle-deck {
+    .middle-deck,
+    .rear-grid {
       grid-template-columns: minmax(0, 1fr);
       gap: 14px;
+    }
+    .rear-face {
+      position: relative;
+      inset: auto;
+      display: none;
+    }
+    .hardware-unit.flipped .front-face {
+      display: none;
+    }
+    .hardware-unit.flipped .rear-face {
+      display: flex;
     }
     .recessed-bay,
     .panel-box,
@@ -1619,6 +1939,14 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
     }
+    .cassette-vault-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .patch-matrix-grid,
+    .tube-timer-bay {
+      grid-template-columns: minmax(0, 1fr);
+    }
     .radio-bank {
       flex-wrap: wrap;
       justify-content: center;
@@ -1671,10 +1999,30 @@
         <button class="swatch" data-theme-id="graphite" data-i18n-title="theme.graphite"><i style="--sw: linear-gradient(135deg, #2c2f33 50%, #ff6a2b 50%)"></i></button>
         <button class="swatch" data-theme-id="braun" data-i18n-title="theme.braun"><i style="--sw: linear-gradient(135deg, #ecebe5 50%, #3e9b5f 50%)"></i></button>
         <button class="swatch" data-theme-id="cobalt" data-i18n-title="theme.cobalt"><i style="--sw: linear-gradient(135deg, #2f4b6e 50%, #ffb81c 50%)"></i></button>
+        <button class="swatch" data-theme-id="xray" data-i18n-title="theme.xray"><i style="--sw: linear-gradient(135deg, #103824 50%, #ffd147 50%)"></i></button>
+      </div>
+      <div class="mini-bank">
+        <button id="flipChassisBtn" data-i18n="btn.flip" data-i18n-title="tip.flip">背部 ↻</button>
       </div>
     </div>
   </div>
 
+  <!-- Gold PCB & Vacuum Tube Underlay for Transparent X-Ray Theme -->
+  <div class="pcb-underlay">
+    <svg width="100%" height="100%" viewBox="0 0 1180 820" preserveAspectRatio="none">
+      <g stroke="rgba(212,175,55,0.26)" stroke-width="1.5" fill="none">
+        <path d="M 80 120 L 280 120 L 320 160 L 580 160" />
+        <path d="M 620 90 L 880 90 L 920 140 L 1100 140" />
+        <path d="M 120 420 L 460 420 L 500 470 L 840 470" />
+        <path d="M 160 660 L 520 660 L 560 610 L 1040 610" />
+        <circle cx="280" cy="120" r="4" fill="rgba(212,175,55,0.4)" />
+        <circle cx="500" cy="470" r="4" fill="rgba(212,175,55,0.4)" />
+        <circle cx="560" cy="610" r="4" fill="rgba(212,175,55,0.4)" />
+      </g>
+    </svg>
+  </div>
+
+  <div class="front-face" id="frontFace">
   <!-- Upper Deck: Magnetic Tape Transport + CRT Scope & VU Meters -->
   <div class="upper-deck">
     <!-- Left: Magnetic Tape Transport -->
@@ -1898,12 +2246,16 @@
       VFD TELEPROMPTER // 点击「语音转文字」或「麦克风录带」自动实时听写字幕...
     </div>
     <div class="stt-actions">
+      <button class="stt-mini-btn" id="touchPianoBtn" data-i18n="stt.piano" data-i18n-title="tip.piano">🎹 琴键</button>
       <button class="stt-mini-btn" id="undoOverdubBtn" data-i18n="stt.undo" data-i18n-title="tip.undo">UNDO ↩</button>
       <button class="stt-mini-btn" id="sharePatchBtn" data-i18n="stt.share" data-i18n-title="tip.share">SHARE 🔗</button>
       <button class="stt-mini-btn" id="sttCopyBtn" data-i18n="stt.copy">COPY</button>
       <button class="stt-mini-btn" id="sttClearBtn" data-i18n="stt.clear">CLR</button>
     </div>
   </div>
+
+  <!-- Touch-Screen 13-Key Chromatic Synth Ribbon (Multi-Touch Slide Ready) -->
+  <div class="touch-keys-drawer" id="touchKeysDrawer"></div>
 
   <!-- Bottom Deck: Heavy Mechanical Transport & Voicing Switches -->
   <div class="bottom-deck">
@@ -1944,6 +2296,89 @@
       </div>
     </div>
   </div>
+  </div><!-- /.front-face -->
+
+  <!-- ===================================================================
+       REAR CHASSIS BACKPLATE (180° 3D Flip: Cassette Vault, Patchbay, Sleep Timer)
+       =================================================================== -->
+  <div class="rear-face" id="rearFace">
+    <div class="top-plate">
+      <div class="brand-cluster">
+        <span class="brand-badge">REAR BAY // 04-B</span>
+        <span class="model-title" data-i18n="rear.title">MAGNETIC CASSETTE VAULT &amp; MODULAR PATCH MATRIX</span>
+      </div>
+      <div class="status-cluster">
+        <div class="mini-bank">
+          <button id="flipBackToFrontBtn" class="active" data-i18n="btn.front">◀ 返回正面 (TAB)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rear-grid">
+      <!-- Left: 6-Slot Cassette Library Drawer -->
+      <div class="panel-box">
+        <div class="section-title-row">
+          <span data-i18n="rear.vault">07 // 6-SLOT MAGNETIC CASSETTE VAULT (SAVE / SWAP TAPES)</span>
+          <span data-i18n="rear.vault.hint">INDEXED-DB PERSISTENT</span>
+        </div>
+        <div class="cassette-vault-grid" id="cassetteVaultGrid"></div>
+      </div>
+
+      <!-- Right: Modular Patch Matrix + Glowing Vacuum Tubes & Sleep Timer -->
+      <div class="rear-right-stack">
+        <div class="panel-box">
+          <div class="section-title-row">
+            <span data-i18n="rear.patch">08 // MODULAR CV PATCH MATRIX (TAP TO ROUTE)</span>
+            <span data-i18n="rear.patch.hint">REAL-TIME MODULATION</span>
+          </div>
+          <div class="patch-matrix-grid" id="patchMatrixGrid">
+            <button class="patch-cord-btn" data-patch="envFilter">
+              <span>01 · ENVELOPE → LPF CUTOFF</span>
+              <span class="jack-hole"></span>
+            </button>
+            <button class="patch-cord-btn" data-patch="lfoPan">
+              <span>02 · TAPE LFO → STEREO DRIFT</span>
+              <span class="jack-hole"></span>
+            </button>
+            <button class="patch-cord-btn" data-patch="subDrive">
+              <span>03 · SUB BASS → TUBE WARMTH</span>
+              <span class="jack-hole"></span>
+            </button>
+            <button class="patch-cord-btn" data-patch="rainDuck">
+              <span>04 · VOICE/PAD → RAIN DUCKING</span>
+              <span class="jack-hole"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div class="section-title-row">
+            <span data-i18n="rear.timer">09 // DUAL 12AX7 VACUUM STAGE &amp; SLEEP TIMER</span>
+            <span id="sleepTimerReadout">TIMER: OFF</span>
+          </div>
+          <div class="tube-timer-bay">
+            <div class="tube-window">
+              <div class="vacuum-tube" id="tubeBulb1"></div>
+              <div class="vacuum-tube" id="tubeBulb2"></div>
+              <div style="font-family:var(--font-mono);font-size:9.5px;color:#b8b4aa;line-height:1.4;">
+                <div style="color:var(--amber);font-weight:700;">12AX7 CATHODE</div>
+                <div id="tubeBiasText">BIAS: 240V DC</div>
+              </div>
+            </div>
+            <div class="sleep-timer-controls">
+              <div style="font-size:9.5px;color:#9ea3a8;margin-bottom:4px;" data-i18n="rear.timer.sub">自动断电停机倒计时 (POMODORO)</div>
+              <div class="timer-pills" id="sleepTimerBank">
+                <button class="cas-btn primary" data-min="0">OFF</button>
+                <button class="cas-btn" data-min="15">15m</button>
+                <button class="cas-btn" data-min="30">30m</button>
+                <button class="cas-btn" data-min="60">60m</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.rear-face -->
 </div>
 
 <div class="desk-caption">
@@ -1996,7 +2431,7 @@
       'cap.4': '<kbd>1–4</kbd> 切换和弦', 'cap.piano': '<kbd>A–K</kbd> 弹奏琴键旋律 · <kbd>Z</kbd> 撤销叠录',
       'cap.5': '<kbd>T</kbd> 换主题　<kbd>L</kbd> 换语言',
       'group.source': '音源', 'src.load': '上带文件', 'src.demo': '示范磁带', 'src.micrec': '麦克风录带', 'src.micstop': '停止录带', 'src.overdub': '叠录 SOS', 'src.live': '监听拾音', 'tip.micrec': '用麦克风把你的声音直接录进旋转磁带盘（快捷键 R），录完立即循环播放并可搓碟/变速', 'tip.overdub': '开启磁带叠录模式（Sound-on-Sound）：在现有磁带音乐或录音上一层层叠加新声音，老声音按 85% 磁带老化衰减', 'lcd.empty': '拖入音频或点示范磁带', 'group.stutter': '切片', 'group.iso': '杀频', 'iso.low': '低频', 'iso.mid': '中频', 'iso.high': '高频', 'rec.idle': '转录 WAV', 'rec.active': '录音导出', 'rec.video': '动态卡片 🎬', 'rec.vactive': '生成视频...', 'stt.undo': '撤销 ↩', 'stt.share': '配方 🔗', 'stt.shared': '已复制配方!', 'tip.recvideo': '实时捕获当前旋转磁带与示波器生成 10 秒动态有声视频卡片，可直接分享社交平台', 'tip.undo': '撤销上一次磁带叠录（快捷键 Z），恢复叠录前的声音', 'tip.share': '将当前 4 轨推子、4 颗旋钮、和弦与机壳主题生成配方链接复制到剪贴板', 'tip.load': '选择本地 MP3/WAV/FLAC 音频装入磁带盘', 'tip.demo': '生成一段内置 Lo-Fi 鼓点与电钢琴磁带环', 'tip.live': '开启麦克风或系统音频输入，实时驱动指针与磁带效果', 'tip.drop': '直接把电脑里的音乐文件拖到上方磁带仓即可上带', 'tip.stutter': '按住（或按 Q/W/E）按当前 BPM 节拍循环鬼畜切片', 'tip.rec': '把当前合成台输出实时录制并下载为立体声 WAV 文件', 'lang.label': '界面语言', 'theme.label': '机壳主题',
-      'theme.ivory': '象牙机壳', 'theme.graphite': '石墨', 'theme.braun': '博朗白', 'theme.cobalt': '钴蓝',
+      'theme.ivory': '象牙机壳', 'theme.graphite': '石墨', 'theme.braun': '博朗白', 'theme.cobalt': '钴蓝', 'theme.xray': '透明探索版 (PCB)', 'btn.flip': '背面 ↻', 'btn.front': '◀ 返回正面', 'tip.flip': '180° 翻转机壳至背面磁带收藏架与跳线矩阵（快捷键 Tab 或点击四角螺丝）', 'stt.piano': '🎹 琴键', 'tip.piano': '展开/收起触摸屏 13 键合成器键盘（支持手指滑动连奏与磁带叠录）', 'rear.title': '背面磁带收藏架与模块化跳线矩阵', 'rear.vault': '07 // 六槽磁带收藏柜（点击可保存或换带）', 'rear.vault.hint': '断电持久保存', 'rear.patch': '08 // 模块化跳线矩阵（点击插拔调制线）', 'rear.patch.hint': '实时声学调制', 'rear.timer': '09 // 双电子管阴极仓与专注睡眠定时', 'rear.timer.sub': '专注倒计时自动停机 (POMODORO)',
     },
     en: {
       'doc.title': 'TP-04 Field Console',
@@ -2032,7 +2467,7 @@
       'cap.4': '<kbd>1–4</kbd> change chord', 'cap.piano': '<kbd>A–K</kbd> play synth piano · <kbd>Z</kbd> undo overdub',
       'cap.5': '<kbd>T</kbd> theme　<kbd>L</kbd> language',
       'group.source': 'TAPE IN', 'src.load': 'LOAD MP3', 'src.demo': 'DEMO TAPE', 'src.micrec': 'MIC → TAPE', 'src.micstop': 'STOP TAPE', 'src.overdub': 'OVERDUB', 'src.live': 'MONITOR', 'tip.micrec': 'Record your microphone directly onto the spinning magnetic tape loop (Shortcut: R) to scrub, pitch-shift or stutter your own voice', 'tip.overdub': 'Sound-on-Sound Overdub: layer live microphone audio directly onto the existing rotating tape loop with 85% vintage tape decay', 'lcd.empty': 'DROP AUDIO ON REELS', 'group.stutter': 'LOOP', 'group.iso': 'ISOLATOR', 'iso.low': 'LOW', 'iso.mid': 'MID', 'iso.high': 'HIGH', 'rec.idle': 'REC WAV', 'rec.active': 'STOP & SAVE', 'rec.video': 'CARD 🎬', 'rec.vactive': 'RECORDING...', 'stt.undo': 'UNDO ↩', 'stt.share': 'SHARE 🔗', 'stt.shared': 'LINK COPIED!', 'tip.recvideo': 'Record an 8-second animated tape postcard with live audio & reels for Instagram / X / TikTok', 'tip.undo': 'Undo last tape overdub layer (Shortcut: Z)', 'tip.share': 'Copy unique sound patch URL with current faders, knobs & chord', 'tip.load': 'Load a local MP3/WAV/FLAC file onto the tape reels', 'tip.demo': 'Load built-in procedural Lo-Fi drum & Rhodes tape loop', 'tip.live': 'Route live microphone / loopback audio through the tape deck', 'tip.drop': 'Drag and drop any audio file onto the tape transport bay', 'tip.stutter': 'Hold (or press Q/W/E) for beat-synced tape stutter roll', 'tip.rec': 'Record master output and export a stereo 16-bit WAV file', 'lang.label': 'Interface language', 'theme.label': 'Chassis theme',
-      'theme.ivory': 'Ivory', 'theme.graphite': 'Graphite', 'theme.braun': 'Braun White', 'theme.cobalt': 'Cobalt',
+      'theme.ivory': 'Ivory', 'theme.graphite': 'Graphite', 'theme.braun': 'Braun White', 'theme.cobalt': 'Cobalt', 'theme.xray': 'Clear PCB (X-Ray)', 'btn.flip': 'REAR ↻', 'btn.front': '◀ FRONT PANEL', 'tip.flip': 'Flip chassis 180° to Rear Cassette Vault & Modular Patchbay (Shortcut: Tab or tap corner screws)', 'stt.piano': '🎹 KEYS', 'tip.piano': 'Toggle touch-friendly 13-key chromatic synth ribbon', 'rear.title': 'MAGNETIC CASSETTE VAULT & MODULAR PATCH MATRIX', 'rear.vault': '07 // 6-SLOT MAGNETIC CASSETTE VAULT (SAVE / LOAD TAPES)', 'rear.vault.hint': 'INDEXED-DB PERSISTENT', 'rear.patch': '08 // MODULAR CV PATCH MATRIX (TAP TO ROUTE)', 'rear.patch.hint': 'REAL-TIME MODULATION', 'rear.timer': '09 // DUAL 12AX7 VACUUM STAGE & SLEEP TIMER', 'rear.timer.sub': 'AUTO CAPSTAN SHUTDOWN TIMER',
     },
     ja: {
       'doc.title': 'TP-04 フィールド・コンソール',
@@ -2068,11 +2503,11 @@
       'cap.4': '<kbd>1–4</kbd> コード切替', 'cap.piano': '<kbd>A–K</kbd> シンセ鍵盤演奏 · <kbd>Z</kbd> 重ね録り取消',
       'cap.5': '<kbd>T</kbd> テーマ　<kbd>L</kbd> 言語',
       'group.source': '音源', 'src.load': 'ファイル読込', 'src.demo': 'デモテープ', 'src.micrec': 'マイク録音', 'src.micstop': '録音停止', 'src.overdub': '重ね録り', 'src.live': 'モニター', 'tip.micrec': 'マイクの音声を回転中の磁気テープへ直接録音（キー R）。録音後すぐにスクラブや変速が可能', 'tip.overdub': 'サウンド・オン・サウンド重ね録り：既存のテープループ上に新しい音声を85%減衰で重ねる', 'lcd.empty': '音声をリールへドロップ', 'group.stutter': 'ループ', 'group.iso': 'アイソレータ', 'iso.low': '低域', 'iso.mid': '中域', 'iso.high': '高域', 'rec.idle': 'WAV 録音', 'rec.active': '停止・保存', 'rec.video': '動画カード 🎬', 'rec.vactive': '生成中...', 'stt.undo': '元に戻す ↩', 'stt.share': 'レシピ 🔗', 'stt.shared': 'リンク複製済!', 'tip.recvideo': 'リール回転と音声を含む8秒のアニメーション動画カードを生成', 'tip.undo': '直前の重ね録りを元に戻す（キー Z）', 'tip.share': '現在のノブやフェーダー状態の共有リンクを生成', 'tip.load': 'MP3/WAV/FLAC をテープリールに装填', 'tip.demo': '内蔵 Lo-Fi ドラム＆エレピ・ループを装填', 'tip.live': 'マイク／外部音声を入力してリアルタイム処理', 'tip.drop': '音声ファイルを上部リールへ直接ドロップ', 'tip.stutter': '押している間（Q/W/E）BPM同期スタッター', 'tip.rec': 'マスター出力を録音してステレオ WAV 保存', 'lang.label': '表示言語', 'theme.label': '筐体テーマ',
-      'theme.ivory': 'アイボリー', 'theme.graphite': 'グラファイト', 'theme.braun': 'ブラウン・ホワイト', 'theme.cobalt': 'コバルト',
+      'theme.ivory': 'アイボリー', 'theme.graphite': 'グラファイト', 'theme.braun': 'ブラウン・ホワイト', 'theme.cobalt': 'コバルト', 'theme.xray': 'スケルトン基板 (PCB)', 'btn.flip': '背面 ↻', 'btn.front': '◀ 正面へ戻る', 'tip.flip': '筐体を180°反転して背面カセット保管庫＆パッチベイを表示（Tabキー）', 'stt.piano': '🎹 鍵盤', 'tip.piano': 'タッチ対応13鍵シンセリボンを表示', 'rear.title': '背面カセット保管庫＆モジュラー・パッチマトリクス', 'rear.vault': '07 // 6スロット・カセット保管庫（保存・装填）', 'rear.vault.hint': '自動永続化', 'rear.patch': '08 // モジュラー・パッチマトリクス', 'rear.patch.hint': 'リアルタイム変調', 'rear.timer': '09 // 12AX7 真空管ステージ＆スリープタイマー', 'rear.timer.sub': '自動停止ポモドーロ・タイマー',
     },
   };
   const LANGS = ['zh', 'en', 'ja'];
-  const THEMES = ['ivory', 'graphite', 'braun', 'cobalt'];
+  const THEMES = ['ivory', 'graphite', 'braun', 'cobalt', 'xray'];
   const HTML_LANG = { zh: 'zh-CN', en: 'en', ja: 'ja' };
   let currentLang = 'en';
   const t = (key) => (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
@@ -2806,6 +3241,11 @@
   window.addEventListener('keydown', (e) => {
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
 
+    if (e.code === 'Tab') {
+      e.preventDefault();
+      toggleChassisFlip();
+      return;
+    }
     if (e.code === 'Space') {
       e.preventDefault();
       if (!powered) togglePower(true);
@@ -2954,7 +3394,8 @@
     }
 
     // 4. Map Parameters to Real-Time WebAudio Synthesis
-    const cutoffHz = Math.round(140 * Math.pow(95, cutoffKnob));
+    const envBoost = (patchState.envFilter && powered) ? Math.min(0.28, (rmsL + rmsR) * 0.9) : 0;
+    const cutoffHz = Math.round(140 * Math.pow(95, Math.min(1, cutoffKnob + envBoost)));
     filterReadout.textContent = `${t('lpf')}: ${cutoffHz} Hz`;
 
     if (actx) {
@@ -4012,6 +4453,234 @@
     if (isCardRecording) return;
     startAnimatedCardRecording();
   });
+
+
+  // =========================================================================
+  // 5H. 180° 3D CHASSIS FLIP, TOUCH PIANO RIBBON, CASSETTE VAULT & PATCH MATRIX
+  // =========================================================================
+  let isChassisFlipped = false;
+  const flipChassisBtn = document.getElementById('flipChassisBtn');
+  const flipBackToFrontBtn = document.getElementById('flipBackToFrontBtn');
+
+  function toggleChassisFlip(forceState) {
+    ensureAudioInit();
+    isChassisFlipped = typeof forceState === 'boolean' ? forceState : !isChassisFlipped;
+    playSwitchClack(isChassisFlipped ? 1 : 0);
+    setTimeout(() => playHapticTick(isChassisFlipped ? 520 : 880, 0.14), 120);
+    consoleUnit.classList.toggle('flipped', isChassisFlipped);
+    flipChassisBtn.classList.toggle('active', isChassisFlipped);
+  }
+
+  flipChassisBtn.addEventListener('click', () => toggleChassisFlip());
+  flipBackToFrontBtn.addEventListener('click', () => toggleChassisFlip(false));
+  // Corner hex screws also act as physical latches to flip the chassis!
+  document.querySelectorAll('.screw').forEach(sc => {
+    sc.addEventListener('click', () => toggleChassisFlip());
+  });
+
+  // Build Touch-Friendly 13-Key Chromatic Synth Ribbon (Multi-touch & Glissando Slide Ready!)
+  const touchKeysDrawer = document.getElementById('touchKeysDrawer');
+  const touchPianoBtn = document.getElementById('touchPianoBtn');
+  const PIANO_LAYOUT = [
+    { code: 'KeyA', note: 'C', sharp: false },
+    { code: 'KeyW', note: 'C#', sharp: true },
+    { code: 'KeyS', note: 'D', sharp: false },
+    { code: 'KeyE', note: 'D#', sharp: true },
+    { code: 'KeyD', note: 'E', sharp: false },
+    { code: 'KeyF', note: 'F', sharp: false },
+    { code: 'KeyT', note: 'F#', sharp: true },
+    { code: 'KeyG', note: 'G', sharp: false },
+    { code: 'KeyY', note: 'G#', sharp: true },
+    { code: 'KeyH', note: 'A', sharp: false },
+    { code: 'KeyU', note: 'A#', sharp: true },
+    { code: 'KeyJ', note: 'B', sharp: false },
+    { code: 'KeyK', note: 'C5', sharp: false },
+  ];
+
+  PIANO_LAYOUT.forEach(item => {
+    const kBtn = document.createElement('button');
+    kBtn.className = `t-piano-key ${item.sharp ? 'sharp' : ''}`;
+    kBtn.dataset.code = item.code;
+    kBtn.innerHTML = `<span>${item.note}</span>`;
+    touchKeysDrawer.appendChild(kBtn);
+  });
+
+  // Pointer & Touch Glissando handling across the piano ribbon
+  let activeTouchKeyCode = null;
+  function handlePianoPointer(e) {
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const keyBtn = el ? el.closest('.t-piano-key') : null;
+    const code = keyBtn ? keyBtn.dataset.code : null;
+    if (code !== activeTouchKeyCode) {
+      if (activeTouchKeyCode) {
+        releaseSynthKey(activeTouchKeyCode);
+        touchKeysDrawer.querySelector(`[data-code="${activeTouchKeyCode}"]`)?.classList.remove('down');
+      }
+      if (code) {
+        playSynthKey(code);
+        keyBtn.classList.add('down');
+        if (navigator.vibrate) navigator.vibrate(4);
+      }
+      activeTouchKeyCode = code;
+    }
+  }
+
+  touchKeysDrawer.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    touchKeysDrawer.setPointerCapture(e.pointerId);
+    handlePianoPointer(e);
+  });
+  touchKeysDrawer.addEventListener('pointermove', (e) => {
+    if (activeTouchKeyCode !== null) handlePianoPointer(e);
+  });
+  const endPianoTouch = () => {
+    if (activeTouchKeyCode) {
+      releaseSynthKey(activeTouchKeyCode);
+      touchKeysDrawer.querySelector(`[data-code="${activeTouchKeyCode}"]`)?.classList.remove('down');
+      activeTouchKeyCode = null;
+    }
+  };
+  touchKeysDrawer.addEventListener('pointerup', endPianoTouch);
+  touchKeysDrawer.addEventListener('pointercancel', endPianoTouch);
+
+  touchPianoBtn.addEventListener('click', () => {
+    ensureAudioInit();
+    playSwitchClack(1);
+    const isOpen = touchKeysDrawer.classList.toggle('open');
+    touchPianoBtn.classList.toggle('active', isOpen);
+    setTimeout(updateViewportScale, 20);
+  });
+
+  // Auto-open Touch Piano Ribbon on touch devices (iPad / iPhone / Android)
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    touchKeysDrawer.classList.add('open');
+    touchPianoBtn.classList.add('active');
+  }
+
+  // 6-Slot Cassette Library Vault (Rear Panel)
+  const cassetteVaultGrid = document.getElementById('cassetteVaultGrid');
+  const CASSETTE_PRESETS = [
+    { slot: 0, title: 'TAPE 01 · LO-FI RHODES', meta: '92 BPM · FACTORY', factory: 'rhodes' },
+    { slot: 1, title: 'TAPE 02 · AMBIENT DRONE', meta: '76 BPM · FACTORY', factory: 'drone' },
+    { slot: 2, title: 'TAPE 03 · USER SLOT A', meta: 'EMPTY REEL', factory: null },
+    { slot: 3, title: 'TAPE 04 · USER SLOT B', meta: 'EMPTY REEL', factory: null },
+    { slot: 4, title: 'TAPE 05 · USER SLOT C', meta: 'EMPTY REEL', factory: null },
+    { slot: 5, title: 'TAPE 06 · USER SLOT D', meta: 'EMPTY REEL', factory: null },
+  ];
+  const userCassetteMemory = {};
+
+  function renderCassetteVault() {
+    cassetteVaultGrid.innerHTML = '';
+    CASSETTE_PRESETS.forEach((item, idx) => {
+      const saved = userCassetteMemory[idx];
+      const hasAudio = Boolean(item.factory || saved);
+      const slotEl = document.createElement('div');
+      slotEl.className = `cassette-slot ${hasAudio ? 'loaded' : 'empty'}`;
+      const title = saved ? saved.title : item.title;
+      const meta = saved ? `${saved.dur}s · ${saved.bpm} BPM` : item.meta;
+      slotEl.innerHTML = `
+        <div class="cassette-label-strip">
+          <span>${title}</span>
+          <span>C-60</span>
+        </div>
+        <div class="cassette-meta">
+          <span>${meta}</span>
+          <span>1/4" CrO2</span>
+        </div>
+        <div class="cassette-btns">
+          <button class="cas-btn primary" data-act="load" data-idx="${idx}">LOAD ▲</button>
+          <button class="cas-btn" data-act="save" data-idx="${idx}">SAVE ●</button>
+        </div>
+      `;
+      cassetteVaultGrid.appendChild(slotEl);
+    });
+
+    cassetteVaultGrid.querySelectorAll('.cas-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        ensureAudioInit(true);
+        const idx = Number(btn.dataset.idx);
+        const act = btn.dataset.act;
+        playSwitchClack(1);
+        if (act === 'save') {
+          if (!tapeLoadedBuffer) {
+            const { buf, bpm } = buildDemoTapeBuffer();
+            tapeLoadedBuffer = buf;
+            detectedBpm = bpm;
+          }
+          const copyBuf = actx.createBuffer(tapeLoadedBuffer.numberOfChannels, tapeLoadedBuffer.length, tapeLoadedBuffer.sampleRate);
+          copyBuf.getChannelData(0).set(tapeLoadedBuffer.getChannelData(0));
+          if (tapeLoadedBuffer.numberOfChannels > 1) copyBuf.getChannelData(1).set(tapeLoadedBuffer.getChannelData(1));
+          userCassetteMemory[idx] = {
+            title: `TAPE 0${idx + 1} · CUSTOM`,
+            dur: (copyBuf.length / copyBuf.sampleRate).toFixed(1),
+            bpm: detectedBpm,
+            buf: copyBuf
+          };
+          renderCassetteVault();
+        } else if (act === 'load') {
+          if (userCassetteMemory[idx]) {
+            tapeLoadedBuffer = userCassetteMemory[idx].buf;
+            detectedBpm = userCassetteMemory[idx].bpm;
+            trackTitleText.textContent = userCassetteMemory[idx].title;
+            bpmBadge.textContent = `${detectedBpm} BPM`;
+          } else if (CASSETTE_PRESETS[idx].factory === 'rhodes') {
+            const { buf, bpm } = buildDemoTapeBuffer();
+            tapeLoadedBuffer = buf;
+            detectedBpm = bpm;
+            trackTitleText.textContent = 'TAPE 01 · LO-FI RHODES';
+            bpmBadge.textContent = `${bpm} BPM`;
+          } else if (CASSETTE_PRESETS[idx].factory === 'drone') {
+            const { buf } = buildDemoTapeBuffer();
+            tapeLoadedBuffer = buf;
+            KNOBS[0].target = 0.55;
+            KNOBS[3].target = 0.85;
+            trackTitleText.textContent = 'TAPE 02 · HALF-SPEED AMBIENT';
+            bpmBadge.textContent = '52 BPM';
+          }
+          toggleChassisFlip(false);
+        }
+      });
+    });
+  }
+  renderCassetteVault();
+
+  // Modular CV Patch Matrix (Rear Panel)
+  const patchState = { envFilter: false, lfoPan: false, subDrive: false, rainDuck: false };
+  document.querySelectorAll('#patchMatrixGrid .patch-cord-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      ensureAudioInit(true);
+      const key = btn.dataset.patch;
+      patchState[key] = !patchState[key];
+      playSwitchClack(patchState[key] ? 1 : 0);
+      btn.classList.toggle('patched', patchState[key]);
+    });
+  });
+
+  // Mechanical Sleep / Pomodoro Timer
+  let sleepRemainSec = 0;
+  const sleepTimerReadout = document.getElementById('sleepTimerReadout');
+  document.querySelectorAll('#sleepTimerBank .cas-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      ensureAudioInit();
+      playSwitchClack(1);
+      const mins = Number(btn.dataset.min);
+      sleepRemainSec = mins * 60;
+      document.querySelectorAll('#sleepTimerBank .cas-btn').forEach(b => b.classList.toggle('primary', b === btn));
+      sleepTimerReadout.textContent = mins > 0 ? `TIMER: ${mins}:00` : 'TIMER: OFF';
+    });
+  });
+  setInterval(() => {
+    if (sleepRemainSec > 0 && powered) {
+      sleepRemainSec--;
+      const m = String(Math.floor(sleepRemainSec / 60)).padStart(2, '0');
+      const s = String(sleepRemainSec % 60).padStart(2, '0');
+      sleepTimerReadout.textContent = `SLEEP IN ${m}:${s}`;
+      if (sleepRemainSec === 0) {
+        togglePower(false);
+        sleepTimerReadout.textContent = 'TIMER: SHUTDOWN ●';
+      }
+    }
+  }, 1000);
 
   recWavBtn.addEventListener('click', () => {
     ensureAudioInit();
