@@ -1314,10 +1314,224 @@
     outline-offset: -4px;
     background: radial-gradient(circle at 50% 50%, rgba(255, 85, 26, 0.22), #0c0d0e 70%);
   }
+
+  /* =====================================================================
+     MULTI-RESOLUTION & RESPONSIVE ADAPTATION (4K / Laptop / Tablet / Mobile)
+     ===================================================================== */
+  .fader-well-wrap, .knob-stage, .reel-assembly {
+    touch-action: none;
+  }
+
+  #viewportRig {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  @media (min-width: 1040px) {
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+      padding: 0;
+    }
+    #viewportRig {
+      transform: scale(var(--ui-scale, 1));
+    }
+  }
+
+  /* Tablet & Split-Screen Window (< 1040px): Vertical Studio Rack Reflow */
+  @media (max-width: 1039px) {
+    html, body {
+      height: auto;
+      min-height: 100vh;
+      justify-content: flex-start;
+      padding: 16px 12px 32px;
+      overflow-y: auto;
+    }
+    #viewportRig {
+      width: 100%;
+      transform: none !important;
+    }
+    .hardware-unit {
+      width: 100%;
+      max-width: 720px;
+      padding: 18px 18px 20px;
+    }
+    .top-plate {
+      flex-wrap: wrap;
+      gap: 10px;
+      white-space: normal;
+    }
+    .status-cluster {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .upper-deck,
+    .middle-deck {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+    .recessed-bay,
+    .panel-box,
+    .channel-strip,
+    .knob-cell,
+    .vu-meter {
+      min-width: 0;
+      max-width: 100%;
+    }
+    .knobs-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .tape-fx-deck,
+    .bottom-deck {
+      flex-wrap: wrap;
+      white-space: normal;
+      justify-content: center;
+      gap: 10px;
+    }
+    .fx-divider {
+      display: none;
+    }
+    .fx-cluster,
+    .control-group {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+
+  /* Mobile Portrait (< 640px): Pocket Field Recorder Layout */
+  @media (max-width: 640px) {
+    html, body {
+      padding: 8px 6px 24px;
+    }
+    .hardware-unit {
+      width: 100%;
+      max-width: calc(100vw - 12px);
+      padding: 12px 10px 14px;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .screw {
+      width: 10px;
+      height: 10px;
+    }
+    .screw.tl { top: 8px; left: 8px; }
+    .screw.tr { top: 8px; right: 8px; }
+    .screw.bl { bottom: 8px; left: 8px; }
+    .screw.br { bottom: 8px; right: 8px; }
+    .top-plate {
+      padding: 0 6px 10px;
+      justify-content: center;
+      text-align: center;
+    }
+    .brand-cluster {
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
+    .model-title {
+      font-size: 13px;
+      white-space: normal;
+    }
+    .status-cluster {
+      width: 100%;
+      justify-content: center;
+      gap: 8px;
+    }
+    .bay-header,
+    .section-title-row {
+      font-size: 8.5px;
+      white-space: normal;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .tape-stage {
+      height: 132px;
+      padding: 0 4px;
+    }
+    .reel-assembly {
+      width: 88px;
+      height: 88px;
+    }
+    .tape-pack {
+      width: 68px;
+      height: 68px;
+    }
+    .reel-flange {
+      width: 86px;
+      height: 86px;
+    }
+    .reel-cutout::before {
+      top: 8px;
+      width: 16px;
+      height: 20px;
+      margin-left: -8px;
+    }
+    .reel-hub {
+      width: 28px;
+      height: 28px;
+      margin: -14px 0 0 -14px;
+    }
+    .headstack-column {
+      height: 112px;
+    }
+    .mechanical-counter {
+      font-size: 11px;
+      padding: 3px 4px;
+    }
+    .counter-digit {
+      min-width: 12px;
+      padding: 1px 3px;
+    }
+    .tape-head-shield {
+      width: 74px;
+      height: 34px;
+    }
+    .scope-vu-grid {
+      grid-template-columns: minmax(0, 1fr);
+      height: auto;
+      gap: 10px;
+    }
+    .crt-screen {
+      height: 136px;
+    }
+    .vu-stack {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      height: 72px;
+    }
+    .mixer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .knobs-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .radio-bank {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .track-lcd {
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+    .desk-caption {
+      font-size: 9.5px;
+      gap: 10px;
+      padding: 0 8px;
+      text-align: center;
+    }
+  }
 </style>
 </head>
 <body>
 
+<div id="viewportRig">
 <div class="hardware-unit" id="consoleUnit">
   <div class="screw tl"></div>
   <div class="screw tr"></div>
@@ -1597,6 +1811,7 @@
   <span data-i18n-html="cap.4"></span>
   <span data-i18n-html="cap.5"></span>
 </div>
+</div>
 
 <script>
 (() => {
@@ -1832,7 +2047,7 @@
     const wrap = faderEls[ch.id].wrap;
     const updateFromClientY = (clientY) => {
       const rect = wrap.getBoundingClientRect();
-      const pad = 16;
+      const pad = rect.height * (16 / 168);
       let norm = 1 - (clientY - (rect.top + pad)) / (rect.height - pad * 2);
       norm = Math.max(0, Math.min(1, norm));
       // Magnetic detent snap near 0dB (0.78)
@@ -3024,6 +3239,28 @@
   const guessedLang = nav.startsWith('zh') ? 'zh' : nav.startsWith('ja') ? 'ja' : 'en';
   setTheme(params.get('theme') || saved.theme || 'ivory', false);
   setLanguage(params.get('lang') || saved.lang || guessedLang, false);
+
+  // =========================================================================
+  // 7. AUTOMATIC MULTI-RESOLUTION VIEWPORT SCALER (720p Laptop -> 4K Display)
+  // =========================================================================
+  const viewportRig = document.getElementById('viewportRig');
+  function updateViewportScale() {
+    if (window.innerWidth < 1040) {
+      document.documentElement.style.setProperty('--ui-scale', '1');
+      return;
+    }
+    // Temporarily reset scale to measure natural unscaled height & width
+    document.documentElement.style.setProperty('--ui-scale', '1');
+    const natW = 1140;
+    const natH = viewportRig.offsetHeight || 825;
+    const availW = window.innerWidth - 36;
+    const availH = window.innerHeight - 28;
+    const scale = Math.min(availW / natW, availH / natH);
+    const clamped = Math.max(0.68, Math.min(1.45, scale));
+    document.documentElement.style.setProperty('--ui-scale', clamped.toFixed(4));
+  }
+  window.addEventListener('resize', updateViewportScale);
+  updateViewportScale();
 
   requestAnimationFrame(stepFrame);
 })();
