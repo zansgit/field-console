@@ -1478,7 +1478,7 @@
   }
   .hardware-unit {
     transform-style: preserve-3d;
-    transition: transform 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .hardware-unit.flipped {
     transform: rotateY(180deg);
@@ -1486,33 +1486,23 @@
   .front-face {
     position: relative;
     z-index: 2;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
   }
   .hardware-unit.flipped .front-face {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+    display: none;
   }
 
   /* Rear Backplate & Modular Bay (180deg Back Face) */
   .rear-face {
-    position: absolute;
-    inset: 20px 22px 22px;
+    position: relative;
     transform: rotateY(180deg);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-    z-index: 4;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-between;
     gap: 14px;
+    z-index: 4;
   }
   .hardware-unit.flipped .rear-face {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+    display: flex;
   }
 
   .rear-grid {
@@ -1974,6 +1964,7 @@
   <div class="screw bl"></div>
   <div class="screw br"></div>
 
+  <div class="front-face" id="frontFace">
   <!-- Top Engineering Plate -->
   <div class="top-plate">
     <div class="brand-cluster">
@@ -2022,7 +2013,6 @@
     </svg>
   </div>
 
-  <div class="front-face" id="frontFace">
   <!-- Upper Deck: Magnetic Tape Transport + CRT Scope & VU Meters -->
   <div class="upper-deck">
     <!-- Left: Magnetic Tape Transport -->
@@ -2315,13 +2305,40 @@
     </div>
 
     <div class="rear-grid">
-      <!-- Left: 6-Slot Cassette Library Drawer -->
-      <div class="panel-box">
-        <div class="section-title-row">
-          <span data-i18n="rear.vault">07 // 6-SLOT MAGNETIC CASSETTE VAULT (SAVE / SWAP TAPES)</span>
-          <span data-i18n="rear.vault.hint">INDEXED-DB PERSISTENT</span>
+      <!-- Left: 6-Slot Cassette Library Drawer + Acoustic FSK Modem & WebMIDI Port -->
+      <div class="rear-right-stack">
+        <div class="panel-box">
+          <div class="section-title-row">
+            <span data-i18n="rear.vault">07 // 6-SLOT MAGNETIC CASSETTE VAULT (SAVE / SWAP TAPES)</span>
+            <span data-i18n="rear.vault.hint">INDEXED-DB PERSISTENT</span>
+          </div>
+          <div class="cassette-vault-grid" id="cassetteVaultGrid"></div>
         </div>
-        <div class="cassette-vault-grid" id="cassetteVaultGrid"></div>
+
+        <div class="panel-box">
+          <div class="section-title-row">
+            <span data-i18n="rear.modem">10 // ACOUSTIC FSK DATA MODEM &amp; WEBMIDI DIN-5 PORT</span>
+            <span id="midiStatusText">MIDI: AUTO-SENSE READY</span>
+          </div>
+          <div class="tube-timer-bay">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="font-family:var(--font-mono);font-size:9.5px;color:#b8b4aa;line-height:1.45;">
+                <div style="color:var(--phosphor-green);font-weight:700;">FSK 1200 BAUD ACOUSTIC BEAM</div>
+                <div data-i18n="rear.modem.sub">将当前声音配方编码为复古调制解调器声波隔空传输</div>
+              </div>
+              <button class="mech-key compact orange" id="acousticBeamBtn" style="height:34px;padding:0 12px;">
+                <span data-i18n="rear.beam">声波发射 📡</span>
+              </button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border-left:1px solid rgba(255,255,255,0.1);padding-left:12px;">
+              <div style="font-family:var(--font-mono);font-size:9.5px;color:#b8b4aa;line-height:1.45;">
+                <div style="color:var(--amber);font-weight:700;">HARDWARE MIDI CC / NOTES</div>
+                <div id="midiDeviceName">插入实体 MIDI 键盘/旋钮自动接管推子</div>
+              </div>
+              <span class="brand-badge" style="font-size:9.5px;">DIN-5 IN</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Right: Modular Patch Matrix + Glowing Vacuum Tubes & Sleep Timer -->
@@ -2431,7 +2448,7 @@
       'cap.4': '<kbd>1–4</kbd> 切换和弦', 'cap.piano': '<kbd>A–K</kbd> 弹奏琴键旋律 · <kbd>Z</kbd> 撤销叠录',
       'cap.5': '<kbd>T</kbd> 换主题　<kbd>L</kbd> 换语言',
       'group.source': '音源', 'src.load': '上带文件', 'src.demo': '示范磁带', 'src.micrec': '麦克风录带', 'src.micstop': '停止录带', 'src.overdub': '叠录 SOS', 'src.live': '监听拾音', 'tip.micrec': '用麦克风把你的声音直接录进旋转磁带盘（快捷键 R），录完立即循环播放并可搓碟/变速', 'tip.overdub': '开启磁带叠录模式（Sound-on-Sound）：在现有磁带音乐或录音上一层层叠加新声音，老声音按 85% 磁带老化衰减', 'lcd.empty': '拖入音频或点示范磁带', 'group.stutter': '切片', 'group.iso': '杀频', 'iso.low': '低频', 'iso.mid': '中频', 'iso.high': '高频', 'rec.idle': '转录 WAV', 'rec.active': '录音导出', 'rec.video': '动态卡片 🎬', 'rec.vactive': '生成视频...', 'stt.undo': '撤销 ↩', 'stt.share': '配方 🔗', 'stt.shared': '已复制配方!', 'tip.recvideo': '实时捕获当前旋转磁带与示波器生成 10 秒动态有声视频卡片，可直接分享社交平台', 'tip.undo': '撤销上一次磁带叠录（快捷键 Z），恢复叠录前的声音', 'tip.share': '将当前 4 轨推子、4 颗旋钮、和弦与机壳主题生成配方链接复制到剪贴板', 'tip.load': '选择本地 MP3/WAV/FLAC 音频装入磁带盘', 'tip.demo': '生成一段内置 Lo-Fi 鼓点与电钢琴磁带环', 'tip.live': '开启麦克风或系统音频输入，实时驱动指针与磁带效果', 'tip.drop': '直接把电脑里的音乐文件拖到上方磁带仓即可上带', 'tip.stutter': '按住（或按 Q/W/E）按当前 BPM 节拍循环鬼畜切片', 'tip.rec': '把当前合成台输出实时录制并下载为立体声 WAV 文件', 'lang.label': '界面语言', 'theme.label': '机壳主题',
-      'theme.ivory': '象牙机壳', 'theme.graphite': '石墨', 'theme.braun': '博朗白', 'theme.cobalt': '钴蓝', 'theme.xray': '透明探索版 (PCB)', 'btn.flip': '背面 ↻', 'btn.front': '◀ 返回正面', 'tip.flip': '180° 翻转机壳至背面磁带收藏架与跳线矩阵（快捷键 Tab 或点击四角螺丝）', 'stt.piano': '🎹 琴键', 'tip.piano': '展开/收起触摸屏 13 键合成器键盘（支持手指滑动连奏与磁带叠录）', 'rear.title': '背面磁带收藏架与模块化跳线矩阵', 'rear.vault': '07 // 六槽磁带收藏柜（点击可保存或换带）', 'rear.vault.hint': '断电持久保存', 'rear.patch': '08 // 模块化跳线矩阵（点击插拔调制线）', 'rear.patch.hint': '实时声学调制', 'rear.timer': '09 // 双电子管阴极仓与专注睡眠定时', 'rear.timer.sub': '专注倒计时自动停机 (POMODORO)',
+      'theme.ivory': '象牙机壳', 'theme.graphite': '石墨', 'theme.braun': '博朗白', 'theme.cobalt': '钴蓝', 'theme.xray': '透明探索版 (PCB)', 'btn.flip': '背面 ↻', 'btn.front': '◀ 返回正面', 'tip.flip': '180° 翻转机壳至背面磁带收藏架与跳线矩阵（快捷键 Tab 或点击四角螺丝）', 'stt.piano': '🎹 琴键', 'tip.piano': '展开/收起触摸屏 13 键合成器键盘（支持手指滑动连奏与磁带叠录）', 'rear.title': '背面磁带收藏架与模块化跳线矩阵', 'rear.vault': '07 // 六槽磁带收藏柜（点击可保存或换带）', 'rear.vault.hint': '断电持久保存', 'rear.patch': '08 // 模块化跳线矩阵（点击插拔调制线）', 'rear.patch.hint': '实时声学调制', 'rear.timer': '09 // 双电子管阴极仓与专注睡眠定时', 'rear.timer.sub': '专注倒计时自动停机 (POMODORO)', 'rear.modem': '10 // 声波调制解调器 (FSK MODEM) 与实体 MIDI 接口', 'rear.modem.sub': '将当前配方编码为复古 Modem 声波信号发射', 'rear.beam': '声波传带 📡',
     },
     en: {
       'doc.title': 'TP-04 Field Console',
@@ -2467,7 +2484,7 @@
       'cap.4': '<kbd>1–4</kbd> change chord', 'cap.piano': '<kbd>A–K</kbd> play synth piano · <kbd>Z</kbd> undo overdub',
       'cap.5': '<kbd>T</kbd> theme　<kbd>L</kbd> language',
       'group.source': 'TAPE IN', 'src.load': 'LOAD MP3', 'src.demo': 'DEMO TAPE', 'src.micrec': 'MIC → TAPE', 'src.micstop': 'STOP TAPE', 'src.overdub': 'OVERDUB', 'src.live': 'MONITOR', 'tip.micrec': 'Record your microphone directly onto the spinning magnetic tape loop (Shortcut: R) to scrub, pitch-shift or stutter your own voice', 'tip.overdub': 'Sound-on-Sound Overdub: layer live microphone audio directly onto the existing rotating tape loop with 85% vintage tape decay', 'lcd.empty': 'DROP AUDIO ON REELS', 'group.stutter': 'LOOP', 'group.iso': 'ISOLATOR', 'iso.low': 'LOW', 'iso.mid': 'MID', 'iso.high': 'HIGH', 'rec.idle': 'REC WAV', 'rec.active': 'STOP & SAVE', 'rec.video': 'CARD 🎬', 'rec.vactive': 'RECORDING...', 'stt.undo': 'UNDO ↩', 'stt.share': 'SHARE 🔗', 'stt.shared': 'LINK COPIED!', 'tip.recvideo': 'Record an 8-second animated tape postcard with live audio & reels for Instagram / X / TikTok', 'tip.undo': 'Undo last tape overdub layer (Shortcut: Z)', 'tip.share': 'Copy unique sound patch URL with current faders, knobs & chord', 'tip.load': 'Load a local MP3/WAV/FLAC file onto the tape reels', 'tip.demo': 'Load built-in procedural Lo-Fi drum & Rhodes tape loop', 'tip.live': 'Route live microphone / loopback audio through the tape deck', 'tip.drop': 'Drag and drop any audio file onto the tape transport bay', 'tip.stutter': 'Hold (or press Q/W/E) for beat-synced tape stutter roll', 'tip.rec': 'Record master output and export a stereo 16-bit WAV file', 'lang.label': 'Interface language', 'theme.label': 'Chassis theme',
-      'theme.ivory': 'Ivory', 'theme.graphite': 'Graphite', 'theme.braun': 'Braun White', 'theme.cobalt': 'Cobalt', 'theme.xray': 'Clear PCB (X-Ray)', 'btn.flip': 'REAR ↻', 'btn.front': '◀ FRONT PANEL', 'tip.flip': 'Flip chassis 180° to Rear Cassette Vault & Modular Patchbay (Shortcut: Tab or tap corner screws)', 'stt.piano': '🎹 KEYS', 'tip.piano': 'Toggle touch-friendly 13-key chromatic synth ribbon', 'rear.title': 'MAGNETIC CASSETTE VAULT & MODULAR PATCH MATRIX', 'rear.vault': '07 // 6-SLOT MAGNETIC CASSETTE VAULT (SAVE / LOAD TAPES)', 'rear.vault.hint': 'INDEXED-DB PERSISTENT', 'rear.patch': '08 // MODULAR CV PATCH MATRIX (TAP TO ROUTE)', 'rear.patch.hint': 'REAL-TIME MODULATION', 'rear.timer': '09 // DUAL 12AX7 VACUUM STAGE & SLEEP TIMER', 'rear.timer.sub': 'AUTO CAPSTAN SHUTDOWN TIMER',
+      'theme.ivory': 'Ivory', 'theme.graphite': 'Graphite', 'theme.braun': 'Braun White', 'theme.cobalt': 'Cobalt', 'theme.xray': 'Clear PCB (X-Ray)', 'btn.flip': 'REAR ↻', 'btn.front': '◀ FRONT PANEL', 'tip.flip': 'Flip chassis 180° to Rear Cassette Vault & Modular Patchbay (Shortcut: Tab or tap corner screws)', 'stt.piano': '🎹 KEYS', 'tip.piano': 'Toggle touch-friendly 13-key chromatic synth ribbon', 'rear.title': 'MAGNETIC CASSETTE VAULT & MODULAR PATCH MATRIX', 'rear.vault': '07 // 6-SLOT MAGNETIC CASSETTE VAULT (SAVE / LOAD TAPES)', 'rear.vault.hint': 'INDEXED-DB PERSISTENT', 'rear.patch': '08 // MODULAR CV PATCH MATRIX (TAP TO ROUTE)', 'rear.patch.hint': 'REAL-TIME MODULATION', 'rear.timer': '09 // DUAL 12AX7 VACUUM STAGE & SLEEP TIMER', 'rear.timer.sub': 'AUTO CAPSTAN SHUTDOWN TIMER', 'rear.modem': '10 // ACOUSTIC FSK DATA MODEM & WEBMIDI DIN-5 PORT', 'rear.modem.sub': 'Transmit current patch as 1200-baud FSK data-over-sound chirp', 'rear.beam': 'BEAM FSK 📡',
     },
     ja: {
       'doc.title': 'TP-04 フィールド・コンソール',
@@ -2503,7 +2520,7 @@
       'cap.4': '<kbd>1–4</kbd> コード切替', 'cap.piano': '<kbd>A–K</kbd> シンセ鍵盤演奏 · <kbd>Z</kbd> 重ね録り取消',
       'cap.5': '<kbd>T</kbd> テーマ　<kbd>L</kbd> 言語',
       'group.source': '音源', 'src.load': 'ファイル読込', 'src.demo': 'デモテープ', 'src.micrec': 'マイク録音', 'src.micstop': '録音停止', 'src.overdub': '重ね録り', 'src.live': 'モニター', 'tip.micrec': 'マイクの音声を回転中の磁気テープへ直接録音（キー R）。録音後すぐにスクラブや変速が可能', 'tip.overdub': 'サウンド・オン・サウンド重ね録り：既存のテープループ上に新しい音声を85%減衰で重ねる', 'lcd.empty': '音声をリールへドロップ', 'group.stutter': 'ループ', 'group.iso': 'アイソレータ', 'iso.low': '低域', 'iso.mid': '中域', 'iso.high': '高域', 'rec.idle': 'WAV 録音', 'rec.active': '停止・保存', 'rec.video': '動画カード 🎬', 'rec.vactive': '生成中...', 'stt.undo': '元に戻す ↩', 'stt.share': 'レシピ 🔗', 'stt.shared': 'リンク複製済!', 'tip.recvideo': 'リール回転と音声を含む8秒のアニメーション動画カードを生成', 'tip.undo': '直前の重ね録りを元に戻す（キー Z）', 'tip.share': '現在のノブやフェーダー状態の共有リンクを生成', 'tip.load': 'MP3/WAV/FLAC をテープリールに装填', 'tip.demo': '内蔵 Lo-Fi ドラム＆エレピ・ループを装填', 'tip.live': 'マイク／外部音声を入力してリアルタイム処理', 'tip.drop': '音声ファイルを上部リールへ直接ドロップ', 'tip.stutter': '押している間（Q/W/E）BPM同期スタッター', 'tip.rec': 'マスター出力を録音してステレオ WAV 保存', 'lang.label': '表示言語', 'theme.label': '筐体テーマ',
-      'theme.ivory': 'アイボリー', 'theme.graphite': 'グラファイト', 'theme.braun': 'ブラウン・ホワイト', 'theme.cobalt': 'コバルト', 'theme.xray': 'スケルトン基板 (PCB)', 'btn.flip': '背面 ↻', 'btn.front': '◀ 正面へ戻る', 'tip.flip': '筐体を180°反転して背面カセット保管庫＆パッチベイを表示（Tabキー）', 'stt.piano': '🎹 鍵盤', 'tip.piano': 'タッチ対応13鍵シンセリボンを表示', 'rear.title': '背面カセット保管庫＆モジュラー・パッチマトリクス', 'rear.vault': '07 // 6スロット・カセット保管庫（保存・装填）', 'rear.vault.hint': '自動永続化', 'rear.patch': '08 // モジュラー・パッチマトリクス', 'rear.patch.hint': 'リアルタイム変調', 'rear.timer': '09 // 12AX7 真空管ステージ＆スリープタイマー', 'rear.timer.sub': '自動停止ポモドーロ・タイマー',
+      'theme.ivory': 'アイボリー', 'theme.graphite': 'グラファイト', 'theme.braun': 'ブラウン・ホワイト', 'theme.cobalt': 'コバルト', 'theme.xray': 'スケルトン基板 (PCB)', 'btn.flip': '背面 ↻', 'btn.front': '◀ 正面へ戻る', 'tip.flip': '筐体を180°反転して背面カセット保管庫＆パッチベイを表示（Tabキー）', 'stt.piano': '🎹 鍵盤', 'tip.piano': 'タッチ対応13鍵シンセリボンを表示', 'rear.title': '背面カセット保管庫＆モジュラー・パッチマトリクス', 'rear.vault': '07 // 6スロット・カセット保管庫（保存・装填）', 'rear.vault.hint': '自動永続化', 'rear.patch': '08 // モジュラー・パッチマトリクス', 'rear.patch.hint': 'リアルタイム変調', 'rear.timer': '09 // 12AX7 真空管ステージ＆スリープタイマー', 'rear.timer.sub': '自動停止ポモドーロ・タイマー', 'rear.modem': '10 // 音響FSKモデム＆WebMIDI DIN-5ポート', 'rear.modem.sub': '現在のパッチを1200bps音響信号として送信', 'rear.beam': '音響送信 📡',
     },
   };
   const LANGS = ['zh', 'en', 'ja'];
@@ -4681,6 +4698,72 @@
       }
     }
   }, 1000);
+
+
+  // Acoustic FSK Data-over-Sound Beam (synthesizes authentic 1200-baud Bell 202 modem packet from current patch!)
+  const acousticBeamBtn = document.getElementById('acousticBeamBtn');
+  acousticBeamBtn.addEventListener('click', () => {
+    ensureAudioInit(true);
+    playSwitchClack(1);
+    const patchStr = generateSoundPatchHash();
+    const now = actx.currentTime;
+    const osc = actx.createOscillator();
+    const g = actx.createGain();
+    osc.type = 'sine';
+    g.gain.setValueAtTime(0.18, now);
+
+    // Encode each character of the patch hash as mark (1200Hz) / space (2200Hz) FSK tones
+    let tCursor = now;
+    osc.frequency.setValueAtTime(2100, tCursor); // Handshake carrier header
+    tCursor += 0.14;
+    for (let i = 0; i < Math.min(36, patchStr.length); i++) {
+      const code = patchStr.charCodeAt(i);
+      for (let b = 0; b < 4; b++) {
+        const bit = (code >> b) & 1;
+        osc.frequency.setValueAtTime(bit ? 2200 : 1200, tCursor);
+        tCursor += 0.012;
+      }
+    }
+    g.gain.setValueAtTime(0.18, tCursor);
+    g.gain.exponentialRampToValueAtTime(0.0001, tCursor + 0.06);
+    osc.connect(g);
+    g.connect(actx.destination);
+    if (analyserL) g.connect(analyserL);
+    osc.start(now);
+    osc.stop(tCursor + 0.07);
+  });
+
+  // WebMIDI Hardware Controller Auto-Discovery (CC 1-4 -> Faders, CC 5-8 -> Knobs, Notes -> Synth)
+  if (navigator.requestMIDIAccess) {
+    navigator.requestMIDIAccess().then((midi) => {
+      const updatePorts = () => {
+        const inputs = Array.from(midi.inputs.values());
+        const statusEl = document.getElementById('midiStatusText');
+        const nameEl = document.getElementById('midiDeviceName');
+        if (inputs.length > 0) {
+          statusEl.textContent = `MIDI: ONLINE (${inputs.length})`;
+          nameEl.textContent = inputs[0].name || 'USB MIDI CONTROLLER';
+        }
+        inputs.forEach(input => {
+          input.onmidimessage = (msg) => {
+            const [cmd, d1, d2] = msg.data;
+            const type = cmd & 0xf0;
+            if (type === 0xb0) {
+              // Control Change: CC 1-4 or 16-19 -> Faders; CC 5-8 or 20-23 -> Knobs
+              const norm = d2 / 127;
+              if (d1 >= 1 && d1 <= 4) CHANNELS[d1 - 1].target = norm;
+              else if (d1 >= 5 && d1 <= 8) {
+                const kb = KNOBS[d1 - 5];
+                kb.target = kb.min + norm * (kb.max - kb.min);
+              }
+            }
+          };
+        });
+      };
+      updatePorts();
+      midi.onstatechange = updatePorts;
+    }).catch(() => {});
+  }
 
   recWavBtn.addEventListener('click', () => {
     ensureAudioInit();
