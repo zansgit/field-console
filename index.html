@@ -1335,6 +1335,81 @@
     background: #ff2a1a;
     box-shadow: 0 0 10px #ff2a1a, 0 0 4px #fff;
   }
+  .mech-key.rev-key.latched {
+    border-color: var(--phosphor-green);
+    color: var(--phosphor-green);
+  }
+  .mech-key.rev-key.latched .key-led {
+    background: var(--phosphor-green);
+    box-shadow: 0 0 8px var(--phosphor-green);
+  }
+  /* 06 // VFD Speech-to-Text Teleprompter Strip */
+  .stt-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #0d100e;
+    border-radius: 9px;
+    padding: 7px 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(88, 242, 135, 0.22);
+    box-shadow: inset 0 2px 7px rgba(0,0,0,0.92), 0 1px 0 rgba(255,255,255,0.45);
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-mono);
+  }
+  .stt-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .stt-screen {
+    flex: 1;
+    min-width: 0;
+    font-size: 11.5px;
+    color: var(--phosphor-green);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px 6px;
+    text-shadow: 0 0 6px rgba(88, 242, 135, 0.35);
+  }
+  .stt-screen::-webkit-scrollbar { display: none; }
+  .stt-screen .interim {
+    color: var(--phosphor-amber);
+    opacity: 0.85;
+  }
+  .stt-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .stt-mini-btn {
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(88, 242, 135, 0.32);
+    background: rgba(20, 28, 23, 0.9);
+    color: #9adbb0;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .stt-mini-btn:hover {
+    border-color: var(--phosphor-green);
+    color: var(--phosphor-green);
+  }
+  .stt-mini-btn.active {
+    background: rgba(88, 242, 135, 0.22);
+    color: var(--phosphor-green);
+    border-color: var(--phosphor-green);
+    box-shadow: 0 0 8px rgba(88, 242, 135, 0.3);
+  }
   .tape-stage.drag-over {
     outline: 2px dashed var(--amber);
     outline-offset: -4px;
@@ -1801,6 +1876,22 @@
     </div>
   </div>
 
+  <!-- 06 // VFD Voice-to-Text Teleprompter & Tape Transcript Strip -->
+  <div class="stt-strip" id="sttStrip">
+    <div class="stt-left">
+      <button class="stt-mini-btn" id="sttToggleBtn" data-i18n-title="tip.stt">
+        <span id="sttBtnLabel" data-i18n="stt.btn">🎙️ 语音转文字</span>
+      </button>
+    </div>
+    <div class="stt-screen" id="sttScreen" data-i18n="stt.placeholder">
+      VFD TELEPROMPTER // 点击「语音转文字」或「麦克风录带」自动实时听写字幕...
+    </div>
+    <div class="stt-actions">
+      <button class="stt-mini-btn" id="sttCopyBtn" data-i18n="stt.copy">COPY</button>
+      <button class="stt-mini-btn" id="sttClearBtn" data-i18n="stt.clear">CLR</button>
+    </div>
+  </div>
+
   <!-- Bottom Deck: Heavy Mechanical Transport & Voicing Switches -->
   <div class="bottom-deck">
     <div class="control-group">
@@ -1808,6 +1899,10 @@
       <button class="mech-key orange" id="powerBtn">
         <span class="key-led"></span>
         <span id="powerBtnLabel">ENGAGE CONSOLE</span>
+      </button>
+      <button class="mech-key rev-key" id="reverseBtn" data-i18n-title="tip.rev">
+        <span class="key-led"></span>
+        <span data-i18n="reverse">REV ◀</span>
       </button>
       <button class="mech-key ivory" id="brakeBtn" data-i18n-title="tip.brake">
         <span data-i18n="brake">TAPE BRAKE</span>
@@ -1876,7 +1971,7 @@
       'knob.space.l': '弹簧混响', 'knob.space.s': '衰减与扩散',
       'group.deck': '走带', 'group.chord': '和弦', 'group.scene': '场景',
       'power.off': '启动控制台', 'power.on': '主导轮运转中',
-      'brake': '磁带刹车', 'crash': '弹簧撞击 ⚡',
+      'reverse': '倒放 ◀', 'tip.rev': '一键切换磁带倒放模式（快捷键 V）：让你录下的声音或音乐全程反向倒转播放', 'stt.btn': '🎙️ 语音转字', 'stt.on': '● 听写中', 'stt.placeholder': 'VFD 荧光字幕屏 // 点击「语音转字」或「麦克风录带」实时将说话转为文字...', 'stt.copy': '复制', 'stt.copied': '已复制', 'stt.clear': '清空', 'tip.stt': '开启实时语音转文字（支持中/英/日，随右上角语言切换），录带时也会自动联动转写', 'brake': '磁带刹车', 'crash': '弹簧撞击 ⚡',
       'scene.night': '夜间实验室', 'scene.storm': '铁皮屋暴雨', 'scene.worn': '老旧磁带',
       'tip.brake': '按住（或长按空格）压住磁带轮，声音随之慢放降调',
       'tip.crash': '敲一下弹簧混响罐',
@@ -1912,7 +2007,7 @@
       'knob.space.l': 'SPRING TANK', 'knob.space.s': 'DECAY DISPERSION',
       'group.deck': 'DECK', 'group.chord': 'CHORD', 'group.scene': 'SCENE',
       'power.off': 'ENGAGE CONSOLE', 'power.on': 'CAPSTAN RUNNING',
-      'brake': 'TAPE BRAKE', 'crash': 'SPRING CRASH ⚡',
+      'reverse': 'REV ◀', 'tip.rev': 'Latching Reverse Playback (Shortcut: V): run recorded tape or music continuously backwards', 'stt.btn': '🎙️ VOICE → TXT', 'stt.on': '● LISTENING', 'stt.placeholder': 'VFD TELEPROMPTER // Click VOICE → TXT or MIC → TAPE for live speech transcription...', 'stt.copy': 'COPY', 'stt.copied': 'COPIED', 'stt.clear': 'CLR', 'tip.stt': 'Live Speech-to-Text transcription (follows ZH / EN / JA language selector)', 'brake': 'TAPE BRAKE', 'crash': 'SPRING CRASH ⚡',
       'scene.night': 'NIGHT LAB', 'scene.storm': 'TIN STORM', 'scene.worn': 'WORN TAPE',
       'tip.brake': 'Hold (or hold Space) to press the reels and slow the tape down',
       'tip.crash': 'Kick the spring reverb tank',
@@ -1948,7 +2043,7 @@
       'knob.space.l': 'スプリング残響', 'knob.space.s': '減衰と拡散',
       'group.deck': 'デッキ', 'group.chord': 'コード', 'group.scene': 'シーン',
       'power.off': 'コンソール起動', 'power.on': 'キャプスタン回転中',
-      'brake': 'テープブレーキ', 'crash': 'スプリング衝撃 ⚡',
+      'reverse': '逆再生 ◀', 'tip.rev': 'テープ逆再生モード（キー V）：録音した音声や音楽を逆方向へ連続再生', 'stt.btn': '🎙️ 音声文字変換', 'stt.on': '● 認識中', 'stt.placeholder': 'VFD テレプロンプター // 「音声文字変換」または「マイク録音」でリアルタイム文字起こし...', 'stt.copy': 'コピー', 'stt.copied': '完了', 'stt.clear': '消去', 'tip.stt': 'リアルタイム音声テキスト変換（日・中・英の言語切替に連動）', 'brake': 'テープブレーキ', 'crash': 'スプリング衝撃 ⚡',
       'scene.night': '夜のラボ', 'scene.storm': 'トタン屋根の嵐', 'scene.worn': '擦り切れたテープ',
       'tip.brake': '押し続ける（またはスペース長押し）とリールを押さえて減速',
       'tip.crash': 'スプリングリバーブを叩く',
@@ -2031,6 +2126,7 @@
   let scopeMode = 'wave';
   let powered = false;
   let brakeHeld = false;
+  let tapeReversed = false;
   let reelGrabbed = false;
   let actualCapstanSpeed = 0;
   let tapeAngle = 0;
@@ -2692,6 +2788,8 @@
       selectChord(Number(e.code.replace('Digit', '')) - 1);
     } else if (e.code === 'KeyT' && !e.metaKey && !e.ctrlKey && !e.altKey) {
       setTheme(THEMES[(THEMES.indexOf(document.documentElement.dataset.theme) + 1) % THEMES.length], true);
+    } else if (e.code === 'KeyV' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      toggleReverse();
     } else if (e.code === 'KeyR' && !e.metaKey && !e.ctrlKey && !e.altKey) {
       micTapeRecBtn.click();
     } else if (e.code === 'KeyL' && !e.metaKey && !e.ctrlKey && !e.altKey) {
@@ -2781,7 +2879,8 @@
     const cutoffKnob = KNOBS[2].pos;
     const spaceKnob = KNOBS[3].pos;
 
-    const desiredSpeed = (!powered || brakeHeld) ? 0 : speedKnob;
+    const dirSign = tapeReversed ? -1 : 1;
+    const desiredSpeed = (!powered || brakeHeld) ? 0 : (speedKnob * dirSign);
     if (!reelGrabbed) {
       // Realistic heavy flywheel acceleration & brake friction
       const inertiaRate = brakeHeld ? 6.5 : 3.8;
@@ -2812,7 +2911,7 @@
       `M 95 128 L 44 142 L 245 ${tensionY.toFixed(1)} L 315 ${tensionY.toFixed(1)} L 516 142 L 465 128`
     );
 
-    ipsReadout.textContent = `${t('speed')}: ${(Math.max(0, effectiveSpeed) * 7.5).toFixed(2)} IPS (${effectiveSpeed.toFixed(2)}×)`;
+    ipsReadout.textContent = `${t('speed')}: ${(Math.abs(effectiveSpeed) * 7.5).toFixed(2)} IPS (${effectiveSpeed >= 0 ? '+' : ''}${effectiveSpeed.toFixed(2)}×)`;
 
     // Update Mechanical 5-Digit Counter
     if (Math.abs(effectiveSpeed) > 0.01) {
@@ -3237,6 +3336,7 @@
       micTapeSampleCount = 0;
       micRecStartTime = performance.now();
       isMicRecordingTape = true;
+      if (!sttActive && SpeechRec) startSpeechToText();
       micTapeRecBtn.classList.add('latched');
       headShieldEl.classList.add('recording');
       micTapeRecLabel.setAttribute('data-i18n', 'src.micstop');
@@ -3281,6 +3381,132 @@
     } catch (_) {
       trackTitleText.textContent = 'MIC PERMISSION DENIED';
     }
+  });
+
+  // Reverse Playback Latch Switch (REV ◀ / Shortcut: V)
+  const reverseBtn = document.getElementById('reverseBtn');
+  function toggleReverse(forceState) {
+    ensureAudioInit();
+    tapeReversed = typeof forceState === 'boolean' ? forceState : !tapeReversed;
+    playSwitchClack(tapeReversed ? 1 : 0);
+    reverseBtn.classList.toggle('latched', tapeReversed);
+    if (!powered && tapeReversed) togglePower(true);
+  }
+  reverseBtn.addEventListener('click', () => toggleReverse());
+
+  // =========================================================================
+  // 5C. REAL-TIME SPEECH-TO-TEXT (Web Speech API) VFD TELEPROMPTER
+  // =========================================================================
+  const sttToggleBtn = document.getElementById('sttToggleBtn');
+  const sttBtnLabel = document.getElementById('sttBtnLabel');
+  const sttScreen = document.getElementById('sttScreen');
+  const sttCopyBtn = document.getElementById('sttCopyBtn');
+  const sttClearBtn = document.getElementById('sttClearBtn');
+
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let sttActive = false;
+  let sttFinalTranscript = '';
+  const STT_LANG_MAP = { zh: 'zh-CN', en: 'en-US', ja: 'ja-JP' };
+
+  function renderSttDisplay(interim = '') {
+    if (!sttFinalTranscript && !interim) {
+      sttScreen.setAttribute('data-i18n', 'stt.placeholder');
+      sttScreen.textContent = t('stt.placeholder');
+      return;
+    }
+    sttScreen.removeAttribute('data-i18n');
+    sttScreen.innerHTML = '';
+    const finalSpan = document.createElement('span');
+    finalSpan.textContent = sttFinalTranscript;
+    sttScreen.appendChild(finalSpan);
+    if (interim) {
+      const intSpan = document.createElement('span');
+      intSpan.className = 'interim';
+      intSpan.textContent = ` ${interim}`;
+      sttScreen.appendChild(intSpan);
+    }
+    sttScreen.scrollLeft = sttScreen.scrollWidth;
+  }
+
+  function startSpeechToText() {
+    if (!SpeechRec) {
+      sttScreen.removeAttribute('data-i18n');
+      sttScreen.textContent = '当前浏览器内核不支持 Web Speech API（建议使用 Chrome / Edge / Safari）';
+      return;
+    }
+    if (sttActive) return;
+    try {
+      recognition = new SpeechRec();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = STT_LANG_MAP[currentLang] || 'zh-CN';
+
+      recognition.onresult = (event) => {
+        let interim = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const txt = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            sttFinalTranscript += (sttFinalTranscript ? ' · ' : '') + txt.trim();
+          } else {
+            interim += txt;
+          }
+        }
+        renderSttDisplay(interim);
+      };
+
+      recognition.onerror = () => {};
+      recognition.onend = () => {
+        if (sttActive) {
+          try { recognition.start(); } catch (_) {}
+        }
+      };
+
+      recognition.start();
+      sttActive = true;
+      sttToggleBtn.classList.add('active');
+      sttBtnLabel.setAttribute('data-i18n', 'stt.on');
+      sttBtnLabel.textContent = t('stt.on');
+      if (!sttFinalTranscript) {
+        sttScreen.removeAttribute('data-i18n');
+        sttScreen.textContent = '● LISTENING... 请对着麦克风说话';
+      }
+    } catch (_) {}
+  }
+
+  function stopSpeechToText() {
+    sttActive = false;
+    if (recognition) {
+      try { recognition.onend = null; recognition.stop(); } catch (_) {}
+      recognition = null;
+    }
+    sttToggleBtn.classList.remove('active');
+    sttBtnLabel.setAttribute('data-i18n', 'stt.btn');
+    sttBtnLabel.textContent = t('stt.btn');
+    renderSttDisplay('');
+  }
+
+  sttToggleBtn.addEventListener('click', () => {
+    ensureAudioInit();
+    playSwitchClack(sttActive ? 0 : 1);
+    if (sttActive) stopSpeechToText();
+    else startSpeechToText();
+  });
+
+  sttCopyBtn.addEventListener('click', () => {
+    ensureAudioInit();
+    playHapticTick(1800, 0.08);
+    if (!sttFinalTranscript) return;
+    navigator.clipboard?.writeText(sttFinalTranscript);
+    sttCopyBtn.textContent = t('stt.copied');
+    setTimeout(() => { sttCopyBtn.textContent = t('stt.copy'); }, 1200);
+  });
+
+  sttClearBtn.addEventListener('click', () => {
+    ensureAudioInit();
+    playHapticTick(1100, 0.08);
+    sttFinalTranscript = '';
+    renderSttDisplay('');
   });
 
   // BPM Beat-Synced Tape Loop / Stutter Buttons (Momentary)
@@ -3399,6 +3625,7 @@
       b.classList.toggle('active', b.dataset.lang === lang);
       b.setAttribute('aria-pressed', b.dataset.lang === lang);
     });
+    if (sttActive && recognition) { stopSpeechToText(); startSpeechToText(); }
     try { localStorage.setItem('fc.lang', lang); } catch (_) {}
     if (withSound) { ensureAudioInit(); playSwitchClack(1); }
   }
