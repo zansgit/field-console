@@ -1622,8 +1622,8 @@
   .patch-cord-btn.patched {
     border-color: var(--phosphor-green);
     color: var(--phosphor-green);
-    background: rgba(88, 242, 135, 0.09);
-    box-shadow: 0 0 12px rgba(88, 242, 135, 0.2);
+    background: #0d1f15;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.85), 0 0 12px rgba(88, 242, 135, 0.25);
   }
   .jack-hole {
     width: 12px;
@@ -3460,6 +3460,10 @@
 
     // 02 · TAPE LFO -> STEREO DRIFT & 03 · SUB BASS -> TUBE WARMTH & 04 · RAIN DUCKING
     if (actx && powered) {
+      if (patchState.lfoPan && chGains.pad && chGains.crackle) {
+        const drift = Math.sin(now * 0.0022) * 0.25;
+        chGains.pad.gain.setTargetAtTime(Math.max(0, Math.pow(CHANNELS[2].pos, 1.85) * (1.15 + drift)), actx.currentTime, 0.05);
+      }
       if (patchState.subDrive && chGains.sub) {
         chGains.sub.gain.setTargetAtTime(Math.pow(CHANNELS[3].pos, 1.5) * 1.65, actx.currentTime, 0.04);
       }
@@ -4285,6 +4289,21 @@
       }
       store.put(tapeData, 'last_tape');
       store.put(sttFinalTranscript, 'last_stt');
+      const vaultSerialized = {};
+      Object.keys(userCassetteMemory).forEach(k => {
+        const item = userCassetteMemory[k];
+        if (item && item.buf) {
+          vaultSerialized[k] = {
+            title: item.title,
+            dur: item.dur,
+            bpm: item.bpm,
+            sr: item.buf.sampleRate,
+            ch0: Array.from(item.buf.getChannelData(0)),
+            ch1: item.buf.numberOfChannels > 1 ? Array.from(item.buf.getChannelData(1)) : null
+          };
+        }
+      });
+      store.put(vaultSerialized, 'cassette_vault');
     } catch (_) {}
   }
 
@@ -4314,6 +4333,22 @@
         if (reqStt.result) {
           sttFinalTranscript = reqStt.result;
           renderSttDisplay('');
+        }
+      };
+      const reqVault = store.get('cassette_vault');
+      reqVault.onsuccess = () => {
+        const v = reqVault.result;
+        if (v && typeof v === 'object') {
+          Object.keys(v).forEach(k => {
+            const it = v[k];
+            if (it && it.ch0 && it.ch0.length > 0) {
+              const b = actx.createBuffer(it.ch1 ? 2 : 1, it.ch0.length, it.sr || actx.sampleRate);
+              b.getChannelData(0).set(new Float32Array(it.ch0));
+              if (it.ch1) b.getChannelData(1).set(new Float32Array(it.ch1));
+              userCassetteMemory[k] = { title: it.title, dur: it.dur, bpm: it.bpm, buf: b };
+            }
+          });
+          renderCassetteVault();
         }
       };
     } catch (_) {}
@@ -4699,6 +4734,7 @@
             buf: copyBuf
           };
           renderCassetteVault();
+          persistTapeState();
         } else if (act === 'load') {
           if (userCassetteMemory[idx]) {
             tapeLoadedBuffer = userCassetteMemory[idx].buf;
