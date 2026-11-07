@@ -1,0 +1,7 @@
+# Video renders (stored locally or released via GitHub Releases)
+*.mp4
+*.wav
+
+# OS / Editor artifacts
+.DS_Store
+Thumbs.db
