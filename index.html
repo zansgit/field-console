@@ -858,6 +858,7 @@
       inset 0 1px 1px rgba(255,255,255,0.28);
     position: relative;
     will-change: transform;
+    pointer-events: none;
   }
 
   /* Knurled outer grip texture */
@@ -2543,7 +2544,7 @@
     <div class="panel-box">
       <div class="section-title-row">
         <span data-i18n="proc.title">04 // MAGNETIC &amp; HARMONIC PROCESSORS</span>
-        <span data-i18n="proc.hint">DBL-CLICK RESET</span>
+        <span data-i18n="proc.hint" id="resetAllKnobsHint" style="cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px;" title="双击任意旋钮复位，或点击此处一键复位全部旋钮">DBL-CLICK RESET</span>
       </div>
       <div class="knobs-grid" id="knobsGrid">
         <!-- Populated dynamically with spring physics -->
@@ -3036,7 +3037,17 @@
       btn: strip.querySelector(`#fbtn_${ch.id}`)
     };
 
-    // Fader Drag Interaction
+    // Save default fader position for double-click / double-tap reset
+    ch.def = ch.target;
+    let lastFaderTapTime = 0;
+    const resetFaderToDefault = () => {
+      ensureAudioInit();
+      ch.target = ch.def;
+      playSwitchClack(1);
+      if (navigator.vibrate) navigator.vibrate(6);
+    };
+
+    // Fader Drag & Double-Tap Reset Interaction
     const wrap = faderEls[ch.id].wrap;
     const updateFromClientY = (clientY) => {
       const rect = wrap.getBoundingClientRect();
@@ -3055,18 +3066,31 @@
 
     wrap.addEventListener('pointerdown', (e) => {
       ensureAudioInit(true);
+      const nowTap = performance.now();
+      if (nowTap - lastFaderTapTime < 340) {
+        lastFaderTapTime = 0;
+        resetFaderToDefault();
+        return;
+      }
+      lastFaderTapTime = nowTap;
+
       wrap.setPointerCapture(e.pointerId);
       playHapticTick(820, 0.08);
       updateFromClientY(e.clientY);
       const onMove = (ev) => updateFromClientY(ev.clientY);
       const onUp = (ev) => {
-        wrap.releasePointerCapture(ev.pointerId);
+        try { wrap.releasePointerCapture(ev.pointerId); } catch (_) {}
         wrap.removeEventListener('pointermove', onMove);
         wrap.removeEventListener('pointerup', onUp);
       };
       wrap.addEventListener('pointermove', onMove);
       wrap.addEventListener('pointerup', onUp);
     });
+    wrap.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      resetFaderToDefault();
+    });
+    faderEls[ch.id].read.addEventListener('dblclick', resetFaderToDefault);
 
     wrap.addEventListener('wheel', (e) => {
       e.preventDefault();
@@ -3086,6 +3110,13 @@
       faderEls[ch.id].btn.classList.toggle('active', ch.active);
       faderEls[ch.id].btn.querySelector('.mute-label').textContent = t(ch.active ? 'ch.on' : 'ch.mute');
     });
+  });
+
+  // Clickable header hint to reset all knobs or faders
+  document.getElementById('resetAllKnobsHint')?.addEventListener('click', () => {
+    ensureAudioInit();
+    KNOBS.forEach(kb => { kb.target = kb.def; });
+    playSwitchClack(1);
   });
 
   // Build 4 Knobs with SVG Detent Ring
@@ -3136,8 +3167,25 @@
       lastDetent: Math.round(((kb.def - kb.min) / (kb.max - kb.min)) * kb.steps)
     };
 
+    let lastKnobTapTime = 0;
+    const resetKnobToDefault = () => {
+      ensureAudioInit();
+      kb.target = kb.def;
+      knobEls[kb.id].lastDetent = Math.round(((kb.def - kb.min) / (kb.max - kb.min)) * kb.steps);
+      playSwitchClack(1);
+      if (navigator.vibrate) navigator.vibrate(6);
+    };
+
     stage.addEventListener('pointerdown', (e) => {
       ensureAudioInit(true);
+      const nowTap = performance.now();
+      if (nowTap - lastKnobTapTime < 340) {
+        lastKnobTapTime = 0;
+        resetKnobToDefault();
+        return;
+      }
+      lastKnobTapTime = nowTap;
+
       stage.setPointerCapture(e.pointerId);
       let startY = e.clientY;
       let startNorm = (kb.target - kb.min) / (kb.max - kb.min);
@@ -3157,7 +3205,7 @@
         kb.target = kb.min + norm * (kb.max - kb.min);
       };
       const onUp = (ev) => {
-        stage.releasePointerCapture(ev.pointerId);
+        try { stage.releasePointerCapture(ev.pointerId); } catch (_) {}
         stage.removeEventListener('pointermove', onMove);
         stage.removeEventListener('pointerup', onUp);
       };
@@ -3178,10 +3226,9 @@
       kb.target = kb.min + norm * (kb.max - kb.min);
     }, { passive: false });
 
-    stage.addEventListener('dblclick', () => {
-      ensureAudioInit();
-      kb.target = kb.def;
-      playSwitchClack(1);
+    cell.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      resetKnobToDefault();
     });
   });
 
