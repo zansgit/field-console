@@ -2170,19 +2170,20 @@
       padding: 1px 4px;
     }
     .knob-stage {
-      width: 52px;
-      height: 52px;
-      margin: 0;
+      width: 50px;
+      height: 50px;
+      margin: 1px 0 2px;
     }
     .knob-body {
-      width: 38px;
-      height: 38px;
+      width: 32px;
+      height: 32px;
     }
     .knob-cap {
       inset: 4px;
     }
     .knob-sub {
       font-size: 7px;
+      margin-top: 1px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -3724,8 +3725,8 @@
       ch.pos += ch.vel * dt;
 
       const el = faderEls[ch.id];
-      const topPx = 12 + (1 - ch.pos) * 144;
-      el.cap.style.top = `${topPx.toFixed(2)}px`;
+      const topPct = 7.5 + (1 - ch.pos) * 85;
+      el.cap.style.top = `${topPct.toFixed(2)}%`;
       el.fill.style.height = `${(ch.pos * 100).toFixed(1)}%`;
 
       const db = ch.pos < 0.02 ? '-∞ dB' : `${((ch.pos - 0.78) * 28).toFixed(1)} dB`;
