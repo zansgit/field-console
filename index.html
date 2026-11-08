@@ -1838,29 +1838,29 @@
   /* Mobile Portrait (<= 640px): True Single-Screen Pocket Field Recorder Architecture */
   @media (max-width: 640px) {
     html, body {
-      padding: 4px 4px 12px;
+      padding: 3px 3px 6px;
     }
     .hardware-unit {
       width: 100%;
-      max-width: calc(100vw - 8px);
-      padding: 10px 8px 12px;
-      border-radius: 14px;
+      max-width: calc(100vw - 6px);
+      padding: 8px 7px 9px;
+      border-radius: 13px;
       overflow: hidden;
     }
     .screw {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
     }
-    .screw.tl { top: 6px; left: 6px; }
-    .screw.tr { top: 6px; right: 6px; }
-    .screw.bl { bottom: 6px; left: 6px; }
-    .screw.br { bottom: 6px; right: 6px; }
+    .screw.tl { top: 5px; left: 5px; }
+    .screw.tr { top: 5px; right: 5px; }
+    .screw.bl { bottom: 5px; left: 5px; }
+    .screw.br { bottom: 5px; right: 5px; }
 
     /* Compact 2-Row Top Header on Phone */
     .top-plate {
-      padding: 0 4px 6px;
-      margin-bottom: 8px;
-      gap: 6px;
+      padding: 0 4px 5px;
+      margin-bottom: 6px;
+      gap: 4px;
       justify-content: space-between;
     }
     .brand-cluster {
@@ -1871,11 +1871,11 @@
       gap: 6px;
     }
     .brand-badge {
-      font-size: 9px;
-      padding: 2px 6px;
+      font-size: 8.5px;
+      padding: 2px 5px;
     }
     .model-title {
-      font-size: 11px;
+      font-size: 10.5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1883,139 +1883,140 @@
     .status-cluster {
       width: 100%;
       justify-content: space-between;
-      gap: 4px;
+      gap: 3px;
     }
     .status-pill {
-      font-size: 8.5px;
+      font-size: 8px;
       gap: 3px;
     }
     .mini-bank button {
-      height: 22px;
-      padding: 0 6px;
-      font-size: 9px;
+      height: 20px;
+      padding: 0 5px;
+      font-size: 8.5px;
     }
     .mini-bank .swatch {
-      width: 20px;
-      height: 22px;
+      width: 18px;
+      height: 20px;
     }
 
     /* Compact Upper Deck: Side-by-Side Reels + Slim Oscilloscope/VU Strip */
     .upper-deck {
-      gap: 8px;
-      margin-bottom: 8px;
+      gap: 6px;
+      margin-bottom: 6px;
     }
     .recessed-bay {
-      padding: 8px 8px 9px;
-      border-radius: 10px;
+      padding: 6px 7px 7px;
+      border-radius: 9px;
     }
     .bay-header,
     .section-title-row {
-      font-size: 8px;
-      margin-bottom: 6px;
+      font-size: 7.5px;
+      margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .tape-stage {
-      height: 100px;
+      height: 86px;
       padding: 0 4px;
     }
     .reel-assembly {
-      width: 74px;
-      height: 74px;
+      width: 68px;
+      height: 68px;
     }
     .tape-pack {
-      width: 56px;
-      height: 56px;
+      width: 52px;
+      height: 52px;
     }
     .reel-flange {
-      width: 72px;
-      height: 72px;
+      width: 66px;
+      height: 66px;
     }
     .reel-cutout::before {
-      top: 6px;
-      width: 13px;
-      height: 16px;
-      margin-left: -6.5px;
+      top: 5px;
+      width: 12px;
+      height: 15px;
+      margin-left: -6px;
     }
     .reel-hub {
-      width: 22px;
-      height: 22px;
-      margin: -11px 0 0 -11px;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
     }
     .headstack-column {
-      height: 88px;
+      height: 78px;
     }
     .mechanical-counter {
-      font-size: 10px;
-      padding: 2px 4px;
+      font-size: 9px;
+      padding: 1px 3px;
     }
     .counter-digit {
-      min-width: 11px;
+      min-width: 10px;
       padding: 1px 2px;
     }
     .tape-head-shield {
-      width: 64px;
-      height: 26px;
-      font-size: 6.5px;
+      width: 78px;
+      height: 24px;
+      font-size: 6px;
+      padding: 2px 3px;
     }
 
-    /* Side-by-side CRT Scope + Stacked VU Meters on Mobile so it takes only 92px height! */
+    /* Side-by-side CRT Scope + Stacked VU Meters on Mobile (80px tall) */
     .scope-vu-grid {
       grid-template-columns: 1.35fr 0.85fr;
-      height: 92px;
-      gap: 6px;
+      height: 80px;
+      gap: 5px;
     }
     .crt-screen {
-      height: 92px;
+      height: 80px;
     }
     .scope-mode-bar {
-      bottom: 4px;
-      left: 4px;
+      bottom: 3px;
+      left: 3px;
       gap: 2px;
     }
     .scope-chip {
-      font-size: 7.5px;
+      font-size: 7px;
       padding: 1px 4px;
     }
     .vu-stack {
       display: flex;
       flex-direction: column;
-      height: 92px;
-      gap: 4px;
+      height: 80px;
+      gap: 3px;
     }
     .vu-meter {
-      padding: 2px 5px;
+      padding: 2px 4px;
     }
     .vu-scale-label {
-      font-size: 7.5px;
+      font-size: 7px;
     }
     .vu-needle {
-      height: 24px;
+      height: 21px;
     }
 
     /* Mobile Quick Transport & Tab Switcher Bar */
     .mobile-pocket-bar {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-bottom: 8px;
+      gap: 5px;
+      margin-bottom: 6px;
       position: relative;
       z-index: 3;
     }
     .mob-quick-transport {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
+      gap: 4px;
     }
     .mob-qbtn {
-      height: 32px;
+      height: 29px;
       border-radius: 6px;
       border: 1px solid #1a1c1e;
       background: linear-gradient(180deg, #35383c 0%, #222427 100%);
       color: #e6e2d8;
       font-family: var(--font-mono);
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -2037,19 +2038,19 @@
     .mob-tab-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
+      gap: 3px;
       background: rgba(0,0,0,0.16);
-      padding: 3px;
-      border-radius: 7px;
+      padding: 2px;
+      border-radius: 6px;
     }
     .mob-tab {
-      height: 27px;
-      border-radius: 5px;
+      height: 25px;
+      border-radius: 4px;
       border: 1px solid transparent;
       background: transparent;
       color: var(--chassis-ink);
       font-family: var(--font-mono);
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 700;
       touch-action: manipulation;
     }
@@ -2079,143 +2080,195 @@
 
     /* Compact 4-in-a-Row Mixer & 4-in-a-Row Knobs on Mobile! */
     .middle-deck {
-      gap: 8px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 2px;
     }
     .panel-box {
-      padding: 8px 8px 9px;
-      border-radius: 10px;
+      padding: 6px 6px 7px;
+      border-radius: 9px;
     }
     .mixer-grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 5px;
+      gap: 4px;
     }
     .channel-strip {
-      padding: 6px 4px 7px;
-      border-radius: 7px;
+      padding: 5px 3px 6px;
+      border-radius: 6px;
     }
-    .ch-title { font-size: 8.5px; }
-    .ch-sub { font-size: 8px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .ch-num { font-size: 8px; margin-bottom: 1px; }
+    .ch-name {
+      font-size: 8px;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
     .fader-well-wrap {
-      height: 106px;
+      height: 88px;
+      margin-bottom: 4px;
       padding: 0 2px;
     }
     .fader-ticks {
-      left: 2px;
+      inset: 5px 2px;
+    }
+    .fader-tick-row {
       font-size: 6.5px;
     }
+    .fader-tick-row .tick-l {
+      width: 16px;
+      padding-right: 2px;
+    }
+    .fader-tick-row .tick-r {
+      width: 10px;
+    }
     .fader-slot {
-      margin-left: 14px;
+      width: 6px;
+      height: 74px;
+      margin-left: 8px;
     }
     .fader-cap {
-      left: calc(50% + 7px);
-      width: 30px;
-      height: 18px;
+      left: calc(50% + 4px);
+      width: 26px;
+      height: 16px;
+      margin-left: -13px;
+      margin-top: -8px;
+    }
+    .fader-cap::after {
+      width: 18px;
     }
     .ch-readout {
-      font-size: 8px;
-      margin-top: 4px;
-      padding: 1px 3px;
+      font-size: 7.5px;
+      margin-bottom: 4px;
+      padding: 1px 4px;
     }
-    .mute-key {
-      margin-top: 4px;
-      height: 22px;
+    .tactile-key-mini {
+      padding: 3px 0;
       font-size: 8px;
+      gap: 4px;
     }
 
     /* 4 Knobs in a Single Row on Mobile */
     .knobs-grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 5px;
+      gap: 4px;
     }
     .knob-cell {
-      padding: 6px 3px 7px;
-      border-radius: 7px;
+      padding: 5px 3px 6px;
+      border-radius: 6px;
     }
-    .knob-stage {
-      width: 58px;
-      height: 58px;
-    }
-    .knob-body {
-      width: 42px;
-      height: 42px;
-    }
-    .knob-cap {
-      inset: 5px;
-    }
-    .knob-label {
+    .knob-header {
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
       font-size: 8px;
-      margin-top: 2px;
+      white-space: nowrap;
+      margin-bottom: 1px;
     }
     .knob-val {
-      font-size: 8px;
+      font-size: 7.5px;
+      padding: 1px 4px;
+    }
+    .knob-stage {
+      width: 52px;
+      height: 52px;
+      margin: 0;
+    }
+    .knob-body {
+      width: 38px;
+      height: 38px;
+    }
+    .knob-cap {
+      inset: 4px;
+    }
+    .knob-sub {
+      font-size: 7px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     /* Clean Keypad Grid for Tape FX Deck on Mobile */
     .tape-fx-deck {
-      padding: 8px;
-      gap: 8px;
+      padding: 6px 7px;
+      gap: 5px;
+      margin-bottom: 6px;
       flex-direction: column;
       align-items: stretch;
     }
     .fx-cluster {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 5px;
+      gap: 4px;
       width: 100%;
+    }
+    .fx-cluster:last-child {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .fx-cluster > .group-label {
       grid-column: 1 / -1;
       text-align: left;
-      margin-bottom: 1px;
+      font-size: 7.5px;
     }
     .fx-cluster .radio-bank {
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       width: 100%;
+      padding: 3px;
+    }
+    .fx-cluster .bank-btn {
+      height: 26px;
+      font-size: 8.5px;
     }
     .track-lcd {
       grid-column: 1 / -1;
       width: 100%;
       max-width: 100%;
+      padding: 2px 6px;
     }
     .mech-key.compact {
       width: 100%;
-      height: 32px;
+      height: 28px;
       justify-content: center;
-      font-size: 9px;
+      font-size: 8.5px;
     }
 
     /* VFD Teleprompter & Touch Piano on Mobile */
     .stt-strip {
       flex-wrap: wrap;
-      gap: 5px;
-      padding: 7px 8px;
-      margin-bottom: 8px;
+      gap: 4px;
+      padding: 6px 7px;
+      margin-bottom: 6px;
     }
     .stt-screen {
       order: -1;
       flex: 0 0 100%;
       width: 100%;
       border-bottom: 1px solid rgba(88, 242, 135, 0.16);
-      padding-bottom: 4px;
-      font-size: 11px;
+      padding-bottom: 3px;
+      font-size: 10px;
     }
     .stt-left, .stt-actions {
       display: flex;
       gap: 4px;
       flex-wrap: wrap;
     }
+    .stt-mini-btn {
+      height: 22px;
+      padding: 0 6px;
+      font-size: 8.5px;
+    }
     .touch-keys-drawer.open {
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      padding: 6px;
-      margin-bottom: 8px;
+      gap: 3px;
+      padding: 5px;
+      margin-bottom: 6px;
     }
     .t-piano-key {
-      height: 44px;
-      font-size: 9.5px;
+      height: 38px;
+      font-size: 9px;
     }
     .t-piano-key:last-child {
       grid-column: span 2;
@@ -2223,27 +2276,34 @@
 
     /* Bottom Deck Organized as Clean Full-Width Rows on Mobile */
     .bottom-deck {
-      padding: 8px;
-      gap: 8px;
+      padding: 6px 7px;
+      gap: 5px;
       flex-direction: column;
       align-items: stretch;
     }
     .control-group {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 5px;
+      gap: 4px;
       width: 100%;
     }
     .control-group > .group-label {
       grid-column: 1 / -1;
       text-align: left;
+      font-size: 7.5px;
     }
     .control-group > .radio-bank {
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 4px;
+      gap: 3px;
       width: 100%;
+      padding: 3px;
+    }
+    .control-group .bank-btn {
+      height: 26px;
+      font-size: 8px;
+      padding: 0 2px;
     }
     #sceneBank {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2251,20 +2311,20 @@
     .bottom-deck .mech-key {
       width: 100%;
       min-width: 0;
-      height: 34px;
-      font-size: 9px;
+      height: 30px;
+      font-size: 8.5px;
       justify-content: center;
     }
 
     /* Rear Bay on Mobile */
     .cassette-vault-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 6px;
+      gap: 5px;
     }
     .patch-matrix-grid,
     .tube-timer-bay {
       grid-template-columns: minmax(0, 1fr);
-      gap: 6px;
+      gap: 5px;
     }
     .desk-caption {
       display: none;
