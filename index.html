@@ -3715,6 +3715,7 @@
 
   let vuAngleL = -42, vuVelL = 0;
   let vuAngleR = -42, vuVelR = 0;
+  const patchState = { envFilter: false, lfoPan: false, subDrive: false, rainDuck: false };
   let lastFrame = performance.now();
 
   function stepFrame(now) {
@@ -3808,11 +3809,25 @@
       }
     }
 
-    // 4. Map Parameters to Real-Time WebAudio Synthesis
+    // 4. Sample Real-Time Audio Analyser RMS First (used by both DSP Modulation & CRT Scope/VU)
+    let rmsL = 0, rmsR = 0;
+    if (actx && powered && analyserL && analyserR) {
+      analyserL.getByteTimeDomainData(timeBufL);
+      analyserR.getByteTimeDomainData(timeBufR);
+      for (let i = 0; i < 256; i++) {
+        const vL = (timeBufL[i] - 128) / 128;
+        const vR = (timeBufR[i] - 128) / 128;
+        rmsL += vL * vL;
+        rmsR += vR * vR;
+      }
+      rmsL = Math.sqrt(rmsL / 256);
+      rmsR = Math.sqrt(rmsR / 256);
+    }
+
+    // 4B. Map Parameters & Patch Matrix to Real-Time WebAudio Synthesis
     const envBoost = (patchState.envFilter && powered) ? Math.min(0.32, (rmsL + rmsR) * 1.1) : 0;
     const cutoffHz = Math.round(140 * Math.pow(95, Math.min(1, cutoffKnob + envBoost)));
 
-    // 02 · TAPE LFO -> STEREO DRIFT & 03 · SUB BASS -> TUBE WARMTH & 04 · RAIN DUCKING
     if (actx && powered) {
       if (patchState.lfoPan && chGains.pad && chGains.crackle) {
         const drift = Math.sin(now * 0.0022) * 0.25;
@@ -3864,20 +3879,7 @@
     sctx.fillStyle = 'rgba(7, 13, 9, 0.28)';
     sctx.fillRect(0, 0, scopeCanvas.width, scopeCanvas.height);
 
-    let rmsL = 0, rmsR = 0;
-
     if (actx && powered && analyserL && analyserR) {
-      analyserL.getByteTimeDomainData(timeBufL);
-      analyserR.getByteTimeDomainData(timeBufR);
-
-      for (let i = 0; i < 256; i++) {
-        const vL = (timeBufL[i] - 128) / 128;
-        const vR = (timeBufR[i] - 128) / 128;
-        rmsL += vL * vL;
-        rmsR += vR * vR;
-      }
-      rmsL = Math.sqrt(rmsL / 256);
-      rmsR = Math.sqrt(rmsR / 256);
 
       sctx.save();
       sctx.lineWidth = 1.8;
@@ -5118,7 +5120,6 @@
   renderCassetteVault();
 
   // Modular CV Patch Matrix (Rear Panel)
-  const patchState = { envFilter: false, lfoPan: false, subDrive: false, rainDuck: false };
   document.querySelectorAll('#patchMatrixGrid .patch-cord-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       ensureAudioInit(true);
@@ -5250,7 +5251,7 @@
 
   if (mobPowerQuickBtn) {
     mobPowerQuickBtn.addEventListener('click', () => togglePower());
-    mobDemoQuickBtn.addEventListener('click', () => demoTapeBtn.click());
+    mobDemoQuickBtn.addEventListener('click', () => { demoBeatBtn.click(); mobDemoQuickBtn.classList.toggle('active', demoBeatBtn.classList.contains('latched')); });
     mobRecQuickBtn.addEventListener('click', () => {
       consoleUnit.setAttribute('data-mob-view', 'tape');
       mobTabBar.querySelectorAll('.mob-tab').forEach(b => b.classList.toggle('active', b.dataset.mobTab === 'tape'));
