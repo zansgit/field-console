@@ -3074,17 +3074,21 @@
       }
       lastFaderTapTime = nowTap;
 
-      wrap.setPointerCapture(e.pointerId);
+      try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
       playHapticTick(820, 0.08);
       updateFromClientY(e.clientY);
-      const onMove = (ev) => updateFromClientY(ev.clientY);
-      const onUp = (ev) => {
-        try { wrap.releasePointerCapture(ev.pointerId); } catch (_) {}
+      const cleanup = (ev) => {
+        try { wrap.releasePointerCapture(ev?.pointerId ?? e.pointerId); } catch (_) {}
         wrap.removeEventListener('pointermove', onMove);
-        wrap.removeEventListener('pointerup', onUp);
+        wrap.removeEventListener('pointerup', cleanup);
+        wrap.removeEventListener('pointercancel', cleanup);
+        wrap.removeEventListener('lostpointercapture', cleanup);
       };
+      const onMove = (ev) => updateFromClientY(ev.clientY);
       wrap.addEventListener('pointermove', onMove);
-      wrap.addEventListener('pointerup', onUp);
+      wrap.addEventListener('pointerup', cleanup);
+      wrap.addEventListener('pointercancel', cleanup);
+      wrap.addEventListener('lostpointercapture', cleanup);
     });
     wrap.addEventListener('dblclick', (e) => {
       e.preventDefault();
@@ -3186,10 +3190,18 @@
       }
       lastKnobTapTime = nowTap;
 
-      stage.setPointerCapture(e.pointerId);
+      try { stage.setPointerCapture(e.pointerId); } catch (_) {}
       let startY = e.clientY;
       let startNorm = (kb.target - kb.min) / (kb.max - kb.min);
       playHapticTick(980, 0.07);
+
+      const cleanupKnob = (ev) => {
+        try { stage.releasePointerCapture(ev?.pointerId ?? e.pointerId); } catch (_) {}
+        stage.removeEventListener('pointermove', onMove);
+        stage.removeEventListener('pointerup', cleanupKnob);
+        stage.removeEventListener('pointercancel', cleanupKnob);
+        stage.removeEventListener('lostpointercapture', cleanupKnob);
+      };
 
       const onMove = (ev) => {
         const dy = startY - ev.clientY;
@@ -3204,13 +3216,10 @@
         }
         kb.target = kb.min + norm * (kb.max - kb.min);
       };
-      const onUp = (ev) => {
-        try { stage.releasePointerCapture(ev.pointerId); } catch (_) {}
-        stage.removeEventListener('pointermove', onMove);
-        stage.removeEventListener('pointerup', onUp);
-      };
       stage.addEventListener('pointermove', onMove);
-      stage.addEventListener('pointerup', onUp);
+      stage.addEventListener('pointerup', cleanupKnob);
+      stage.addEventListener('pointercancel', cleanupKnob);
+      stage.addEventListener('lostpointercapture', cleanupKnob);
     });
 
     stage.addEventListener('wheel', (e) => {
